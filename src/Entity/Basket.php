@@ -2,11 +2,16 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\BasketRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['basket:read']]
+)]
 #[ORM\Entity(repositoryClass: BasketRepository::class)]
 class Basket
 {
@@ -15,11 +20,17 @@ class Basket
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('basket:read')]
     #[ORM\ManyToOne(inversedBy: 'baskets')]
     private ?Selection $selection = null;
 
+    #[Groups('basket:read')]
     #[ORM\OneToMany(mappedBy: 'basket', targetEntity: Order::class)]
     private Collection $orders;
+
+    #[Groups('basket:read')]
+    #[ORM\Column(length: 255)]
+    private ?string $status = null;
 
     public function __construct()
     {
@@ -69,6 +80,18 @@ class Basket
                 $order->setBasket(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

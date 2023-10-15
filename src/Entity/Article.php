@@ -3,30 +3,53 @@
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['articles:read']]
+)]
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('articles:read')]
     private ?int $id = null;
 
+
+    #[Groups('articles:read')]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups('articles:read')]
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
+    #[Groups('articles:read')]
     #[ORM\Column(length: 255)]
     private ?string $state = null;
 
-    #[ORM\ManyToOne(inversedBy: 'articles')]
-    private ?Price $price = null;
-
+    #[Groups('articles:read')]
     #[ORM\ManyToOne(inversedBy: 'articles')]
     private ?Category $category = null;
+
+    #[Groups('articles:read')]
+    #[ORM\Column]
+    private ?float $price = null;
+
+    #[Groups('articles:read')]
+    #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'articles')]
+    private Collection $services;
+
+    public function __construct()
+    {
+        $this->services = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,17 +92,6 @@ class Article
         return $this;
     }
 
-    public function getPrice(): ?Price
-    {
-        return $this->price;
-    }
-
-    public function setPrice(?Price $price): static
-    {
-        $this->price = $price;
-
-        return $this;
-    }
 
     public function getCategory(): ?Category
     {
@@ -89,6 +101,42 @@ class Article
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): static
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Service>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(Service $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+        }
+
+        return $this;
+    }
+
+    public function removeService(Service $service): static
+    {
+        $this->services->removeElement($service);
 
         return $this;
     }

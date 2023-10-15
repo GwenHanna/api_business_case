@@ -2,28 +2,38 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\SelectionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['selection:read']]
+)]
 #[ORM\Entity(repositoryClass: SelectionRepository::class)]
 class Selection
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('selection:read')]
     private ?int $id = null;
 
+    #[Groups('selection:read')]
     #[ORM\Column]
     private ?int $quantity = null;
 
+    #[Groups('selection:read')]
     #[ORM\Column]
     private ?float $priceTotal = null;
 
+    #[Groups('selection:read')]
     #[ORM\ManyToOne(inversedBy: 'selections')]
     private ?Service $services = null;
 
+    #[Groups('selection:read')]
     #[ORM\OneToMany(mappedBy: 'selection', targetEntity: Basket::class)]
     private Collection $baskets;
 

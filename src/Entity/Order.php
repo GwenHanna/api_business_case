@@ -2,10 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\OrderRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['order:read']]
+)]
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
 class Order
@@ -13,23 +18,30 @@ class Order
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('order:read')]
     private ?int $id = null;
 
+    #[Groups('order:read')]
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
+    #[Groups('order:read')]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $payementDate = null;
 
+    #[Groups('order:read')]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $depotDate = null;
 
+    #[Groups('order:read')]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $pickUpDate = null;
 
+    #[Groups('order:read')]
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?User $user = null;
 
+    #[Groups('order:read')]
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?Basket $basket = null;
 

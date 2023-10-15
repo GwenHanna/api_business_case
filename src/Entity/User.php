@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,19 +10,26 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['user']]
+)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('user')]
     private ?int $id = null;
 
+    #[Groups('user')]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups('user')]
     private array $roles = [];
 
     /**
@@ -30,33 +38,46 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Groups('user')]
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
+    #[Groups('user')]
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
+    #[Groups('user')]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $birthdate = null;
 
+    #[Groups('user')]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $gender = null;
 
+    #[Groups('user')]
     #[ORM\Column(length: 255)]
     private ?string $street = null;
 
+    #[Groups('user')]
     #[ORM\Column(length: 255)]
     private ?string $zipcode = null;
 
+    #[Groups('user')]
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
+    #[Groups('user')]
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
     private Collection $orders;
+
+    #[Groups('user')]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
+    private Collection $comments;
 
     public function __construct()
     {
         $this->orders = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -237,6 +258,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($order->getUser() === $this) {
                 $order->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getAuthor() === $this) {
+                $comment->setAuthor(null);
             }
         }
 
