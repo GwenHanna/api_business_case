@@ -9,9 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource(
-    normalizationContext: ['groups' => ['service:read']]
-)]
+#[ApiResource]
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
@@ -20,27 +18,22 @@ class Service
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('article:read')]
-    // #[Groups('service:read')]
+    #[Groups('articles')]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups('service:read')]
-    // #[Groups('article:read')]
+    #[Groups('articles')]
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[Groups('service:read')]
-    // #[Groups('article:read')]
+    #[Groups('articles')]
     #[ORM\OneToMany(mappedBy: 'services', targetEntity: Selection::class)]
     private Collection $selections;
 
-    #[Groups('service:read')]
-    // #[Groups('article:read')]
+    #[Groups('articles')]
     #[ORM\Column]
     private ?float $price = null;
 
-    // #[Groups('article:read')]
     #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'services')]
     private Collection $articles;
 
@@ -101,7 +94,7 @@ class Service
     public function removeSelection(Selection $selection): static
     {
         if ($this->selections->removeElement($selection)) {
-            // set the owning side to null (unless already changed)
+            // set the owning side to null (unless ay changed)
             if ($selection->getServices() === $this) {
                 $selection->setServices(null);
             }

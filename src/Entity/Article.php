@@ -2,15 +2,20 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['articles:read']]
+    normalizationContext: [
+        'groups' => ['articles']
+    ]
+
 )]
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -18,31 +23,31 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('articles:read')]
+    #[Groups('articles')]
     private ?int $id = null;
 
 
-    #[Groups('articles:read')]
+    #[Groups('articles')]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups('articles:read')]
+    #[Groups('articles')]
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[Groups('articles:read')]
+    #[Groups('articles')]
     #[ORM\Column(length: 255)]
     private ?string $state = null;
 
-    #[Groups('articles:read')]
+    #[Groups('articles')]
     #[ORM\ManyToOne(inversedBy: 'articles')]
     private ?Category $category = null;
 
-    #[Groups('articles:read')]
+    #[Groups('articles')]
     #[ORM\Column]
     private ?float $price = null;
 
-    #[Groups('articles:read')]
+    #[Groups('articles')]
     #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'articles')]
     private Collection $services;
 

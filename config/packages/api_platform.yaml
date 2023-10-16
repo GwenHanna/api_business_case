@@ -2,6 +2,7 @@ api_platform:
     title: Hello API Platform
     version: 1.0.0
     # Good defaults for REST APIs
+    
     defaults:
         stateless: true
         cache_headers:
@@ -10,3 +11,4 @@ api_platform:
             standard_put: true
         formats:
             json: ["application/json"]
+
