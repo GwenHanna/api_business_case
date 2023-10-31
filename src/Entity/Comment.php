@@ -9,26 +9,28 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['user:connet']]
+    normalizationContext: [
+        'groups'    => ['comment:read']
+    ]
 )]
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
-    #[Groups('user:comment')]
+    #[Groups('comment:read')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('user:comment')]
+    #[Groups('comment:read')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $content = null;
 
-    #[Groups('user:comment')]
+    #[Groups('comment:read')]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateCreated = null;
 
-    #[Groups('user:comment')]
+    #[Groups('comment:read')]
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?User $author = null;
 

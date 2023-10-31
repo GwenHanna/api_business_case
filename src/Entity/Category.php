@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,20 +13,27 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: [
+        'groups' => ['category:read']
+    ]
+)]
+
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('articles')]
+
+    #[Groups(['articles:read', 'category:read'])]
     private ?int $id = null;
 
-    #[Groups('articles')]
+    #[Groups(['category:read', 'articles:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups('category:read')]
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Article::class)]
     private Collection $articles;
 

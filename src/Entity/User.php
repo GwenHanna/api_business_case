@@ -3,7 +3,14 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\UserRepository;
+use App\State\UserPasswordHasher;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -13,7 +20,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['user']]
+    operations: [
+        new GetCollection(),
+        new Post(processor: UserPasswordHasher::class),
+        new Get(),
+        new Put(processor: UserPasswordHasher::class),
+        new Patch(processor: UserPasswordHasher::class),
+        new Delete(),
+    ],
+    normalizationContext:   ['groups'     => ['user:read']],
+    denormalizationContext: ['groups'     => ['user:post']]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -21,15 +37,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('user')]
+    #[Groups('user:read')]
     private ?int $id = null;
 
-    #[Groups('user')]
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['user:read', 'user:post'])]
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups('user')]
+    #[Groups(['user:read', 'user:post'])]
     private array $roles = [];
 
     /**
@@ -38,39 +54,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[Groups('user')]
+    #[Groups('user:post')]
+    private ?string $plainPassword = null;
+
+    #[Groups(['user:read', 'user:post', 'comment:read'])]
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
-    #[Groups('user')]
+    #[Groups(['user:read', 'user:post', 'comment:read'])]
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
-    #[Groups('user')]
+    #[Groups(['user:read', 'user:post'])]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $birthdate = null;
 
-    #[Groups('user')]
+    #[Groups(['user:read', 'user:post'])]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $gender = null;
 
-    #[Groups('user')]
+    #[Groups(['user:read', 'user:post'])]
     #[ORM\Column(length: 255)]
     private ?string $street = null;
 
-    #[Groups('user')]
+    #[Groups(['user:read', 'user:post'])]
     #[ORM\Column(length: 255)]
     private ?string $zipcode = null;
 
-    #[Groups('user')]
+    #[Groups(['user:read', 'user:post'])]
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
-    #[Groups('user')]
+    #[Groups('user:read')]
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
     private Collection $orders;
 
-    #[Groups('user')]
+    #[Groups('user:read')]
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
     private Collection $comments;
 
@@ -293,4 +312,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getPlainPassword(): ?string { return $this->plainPassword; }
+    public function setPlainPassword(?string $plainPassword): self { $this->plainPassword = $plainPassword; return $this; }
 }

@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ApiResource(
     normalizationContext: [
-        'groups' => ['articles']
+        'groups' => ['articles:read']
     ]
 
 )]
@@ -23,37 +23,38 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('articles')]
+    #[Groups('articles:read')]
     private ?int $id = null;
 
 
-    #[Groups('articles')]
+    #[Groups(['articles:read', 'category:read', 'service:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups('articles')]
+    #[Groups('articles:read')]
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[Groups('articles')]
+    #[Groups('articles:read')]
     #[ORM\Column(length: 255)]
     private ?string $state = null;
 
-    #[Groups('articles')]
+    #[Groups('articles:read')]
     #[ORM\ManyToOne(inversedBy: 'articles')]
     private ?Category $category = null;
 
-    #[Groups('articles')]
+    #[Groups(['articles:read', 'service:read'])]
     #[ORM\Column]
     private ?float $price = null;
 
-    #[Groups('articles')]
-    #[ORM\ManyToMany(targetEntity: Service::class, inversedBy: 'articles')]
-    private Collection $services;
+    #[Groups('articles:read')]
+    #[ORM\OneToMany(mappedBy: 'article', targetEntity: Prestation::class)]
+    private Collection $prestations;
+
 
     public function __construct()
     {
-        $this->services = new ArrayCollection();
+        $this->prestations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -123,25 +124,31 @@ class Article
     }
 
     /**
-     * @return Collection<int, Service>
+     * @return Collection<int, Prestation>
      */
-    public function getServices(): Collection
+    public function getPrestations(): Collection
     {
-        return $this->services;
+        return $this->prestations;
     }
 
-    public function addService(Service $service): static
+    public function addPrestation(Prestation $prestation): static
     {
-        if (!$this->services->contains($service)) {
-            $this->services->add($service);
+        if (!$this->prestations->contains($prestation)) {
+            $this->prestations->add($prestation);
+            $prestation->setArticle($this);
         }
 
         return $this;
     }
 
-    public function removeService(Service $service): static
+    public function removePrestation(Prestation $prestation): static
     {
-        $this->services->removeElement($service);
+        if ($this->prestations->removeElement($prestation)) {
+            // set the owning side to null (unless already changed)
+            if ($prestation->getArticle() === $this) {
+                $prestation->setArticle(null);
+            }
+        }
 
         return $this;
     }

@@ -7,6 +7,7 @@ use App\Entity\Basket;
 use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Order;
+use App\Entity\Prestation;
 use App\Entity\Selection;
 use App\Entity\Service;
 use App\Entity\User;
@@ -25,44 +26,66 @@ class AppFixtures extends Fixture
     private const NB_USER = 10;
     private const NB_COMMENT = 10;
     private const NB_ORDERS = 5;
-    private const CATEGORIES = ['Vêtement', 'Linge de maison', 'Linge de lit', 'Maroquinerie', 'Tenue de soirée'];
+    private const NB_BASKET = 5;
+    private const CATEGORIES = ['Tenue de jour', 'Tenue de soirée', 'Linge de maison', 'Linge de lit', 'Maroquinerie', 'Tenue de soirée'];
     private const SERVICE =
     [
         [
             'name' => 'Nettoyage à sec',
-            'price' => 4
+            'price' => 4,
+            'picture'   =>  'dry_cleaning.jpg',
+            'category' => 'nettoyage'
         ],
         [
             'name' => 'Nettoyage linge délicat',
-            'price' => 8
+            'price' => 8,
+            'picture'   => 'Card_clean_delicate.jpg',
+            'category' => 'nettoyage'
         ],
         [
             'name' => 'Réparation de vêtement',
-            'price' => 0
+            'price' => 0,
+            'picture'   => 'reparation.jpg',
+            'category' => 'autre'
         ],
         [
             'name' => 'Nettoyage du cuire',
-            'price' => 10
+            'price' => 1,
+            'picture'   => 'clean_leather.jpg',
+            'category' => 'nettoyage'
+
         ],
-        [
-            'name' => 'Soin du cuire',
-            'price' => 12
-        ],
+
         [
             'name' => 'Repassage',
-            'price' => 3
+            'price' => 3,
+            'picture'   => 'ironing.jpg',
+            'category' => 'autre'
         ],
         [
             'name' => 'Blanchiment',
-            'price' => 5
+            'price' => 5,
+            'picture'   => 'Card_care_whitening.jpg',
+            'category' => 'soins'
         ],
         [
             'name' => 'Traitement anti-tâche',
-            'price' => 5
+            'price' => 5,
+            'picture'   => 'Card_anti_stain.jpg',
+            'category' => 'soins'
         ],
         [
             'name' => 'Traitement tapis',
-            'price' => 15
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'category' => 'soins'
+
+        ],
+        [
+            'name' => 'Soin du cuire',
+            'price' => 1,
+            'picture'   => 'care_leather.jpg',
+            'category' => 'soins'
         ]
     ];
 
@@ -70,81 +93,94 @@ class AppFixtures extends Fixture
     [
         [
             "name"      => "Pantalon",
-            "category"  => "Vêtement",
+            "category"  => "Tenue de jour",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
-            "price"      => 10
+            "price"      => 10,
+            "picture"   =>  ""
         ],
         [
             "name"      => "Jeans",
-            "category"  => "Vêtement",
+            "category"  => "Tenue de jour",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
-            "price"      => 10
+            "price"      => 10,
+            "picture"   =>  "jeans.jpg"
         ],
         [
             "name"      => "Robe",
-            "category"  => "Vêtement",
+            "category"  => "Tenue de jour",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
-            "price"      => 12
+            "price"      => 12,
+            "picture"   =>  "dress.jpg"
         ],
         [
             "name"      => "Chemise",
-            "category"  => "Vêtement",
+            "category"  => "Tenue de jour",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
-            "price"      => 8
+            "price"      => 8,
+            "picture"   => "sweater.jpg"
         ],
         [
             "name"      => "Tee-shirt",
-            "category"  => "Vêtement",
+            "category"  => "Tenue de jour",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
-            "price"      => 5
+            "price"      => 5,
+            "picture"   => ""
         ],
         [
             "name"      => "Veste",
-            "category"  => "Vêtement",
+            "category"  => "Tenue de jour",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
-            "price"      => 13
+            "price"      => 13,
+            "picture"   => ""
         ],
         [
             "name"      => "Robe de marier",
-            "category"  => "Vêtement",
+            "category"  => "Tenue de soirée",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
-            "price"      => 45
+            "price"      => 45,
+            "picture"   => ""
         ],
         [
             "name"      => "Costume",
-            "category"  => "Vêtement",
+            "category"  => "Tenue de soirée",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
-            "price"      => 48
+            "price"      => 48,
+            "picture"   => ""
         ],
         [
             "name"      => "Drap",
             "category"  => "Linge de maison",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Blanchiment', 'Repassage', 'Traitement anti-tâche'],
-            "price"      => 5
+            "price"      => 5,
+            "picture"   => ""
         ],
         [
             "name"      => "House de couette",
             "category"  => "Linge de maison",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Blanchiment', 'Repassage', 'Traitement anti-tâche'],
-            "price"      => 20
+            "price"      => 20,
+            "picture"   => ""
         ],
         [
             "name"      => "Tapis",
             "category"  => "Linge de maison",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Traitement anti-tâche', 'Traitement tapis'],
-            "price"      => 30
+            "price"      => 30,
+            "picture"   => ""
         ],
         [
             "name"      => "Sac",
             "category"  => "Maroquinerie",
             "service"   => ['Traitement anti-tâche', 'Soin du cuire'],
-            "price"      => 15
+            "price"      => 15,
+            "picture"   => ""
         ],
         [
             "name"      => "Ceinture",
             "category"  => "Maroquinerie",
             "service"   => ['Traitement anti-tâche', 'Soin du cuire'],
-            "price"      => 8
+            "price"      => 8,
+            "picture"   => ""
         ],
 
 
@@ -162,6 +198,7 @@ class AppFixtures extends Fixture
             $manager->persist($category);
             $categories[$value] = $category;
         }
+        $manager->flush();
 
         // Création des services
         $services = [];
@@ -170,35 +207,11 @@ class AppFixtures extends Fixture
             $service
                 ->setName($value['name'])
                 ->setDescription($faker->realText())
-                ->setPrice($value['price']);
+                ->setPrice($value['price'])
+                ->setPicture($value['picture'])
+                ->setCategory($value['category']);
             $manager->persist($service);
             $services[$value['name']] = $service;
-        }
-
-        // Création des articles
-        foreach (self::ARTICLES as $key => $value) {
-            $article = new Article();
-            $article
-                ->setName($value['name'])
-                ->setDescription($faker->realText())
-                ->setPrice($value['price'])
-                ->setState('');
-
-            $articleServices = [];
-            foreach ($value['service'] as $serviceName) {
-                if (isset($services[$serviceName])) {
-                    $articleServices[] = $services[$serviceName];
-                }
-            }
-            foreach ($articleServices as $service) {
-                $article->addService($service);
-            }
-
-            if (isset($categories[$value['category']])) {
-                $cat = $categories[$value['category']];
-                $article->setCategory($cat);
-            }
-            $manager->persist($article);
         }
 
         // Création de l'admin
@@ -207,13 +220,13 @@ class AppFixtures extends Fixture
             ->setFirstname($faker->firstName())
             ->setLastname($faker->lastName())
             ->setGender($faker->title())
-            ->setEmail($faker->email())
+            ->setEmail('admin@admin.com')
             ->setBirthdate($faker->dateTime())
             ->setCity($faker->city())
             ->setStreet($faker->streetAddress())
             ->setRoles(["ROLE_ADMIN"])
             ->setZipcode($faker->postcode())
-            ->setPassword($this->hasher->hashPassword($admin, 'user'));
+            ->setPassword($this->hasher->hashPassword($admin, 'admin'));
 
         $manager->persist($admin);
 
@@ -252,7 +265,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < self::NB_ORDERS; $i++) {
             $selection = new Selection();
             $selection
-                ->setServices($faker->randomElement($services))
+                // ->setServices($faker->randomElement($services))
                 ->setQuantity($faker->randomDigitNotNull())
                 ->setPriceTotal(10);
             $selections[] = $selection;
@@ -260,9 +273,9 @@ class AppFixtures extends Fixture
         }
 
         // Création des panier
-        $statuBasket = ['attente', 'confirmed'];
+        $statuBasket = ['waiting', 'confirmed'];
         $baskets = [];
-        for ($i = 0; $i < self::NB_ORDERS; $i++) {
+        for ($i = 0; $i < self::NB_BASKET; $i++) {
             $basket = new Basket();
             $basket
                 ->setSelection($faker->randomElement($selections))
@@ -273,22 +286,60 @@ class AppFixtures extends Fixture
         }
 
         // Création des commandes
-        $statuOrder = ['attente', 'start', 'finish'];
+        $statuOrder = ['waiting', 'start', 'finish'];
         $orders = [];
-        foreach ($baskets as $key => $value) {
-            if ($value->getStatus() === 'confirmed') {
+        foreach ($baskets as $key => $basket) {
+            if ($basket->getStatus() === 'confirmed') {
                 $order = new Order();
                 $order
                     ->setDepotDate($faker->dateTimeInInterval())
                     ->setPayementDate($faker->dateTimeInInterval())
                     ->setPickUpDate($faker->dateTimeBetween())
                     ->setStatus($faker->randomElement($statuOrder));
-                if ($order->getStatus() !== 'attente') {
+                if ($order->getStatus() !== 'waiting') {
                     $order->setUser($faker->randomElement($users));
                 }
+                $manager->persist($order);
             }
-            $manager->persist($order);
         }
+
+        // Création des articles
+        $articles = [];
+        foreach (self::ARTICLES as $key => $article) {
+            $newArticle = new Article();
+            $newArticle
+                ->setName($article['name'])
+                ->setDescription($faker->realText())
+                ->setPrice($article['price'])
+                ->setState('');
+            // ->setCategory()
+
+            $articleServices = [];
+            foreach ($article['service'] as $serviceName) {
+                if (isset($services[$serviceName])) {
+                    $articleServices[] = $services[$serviceName];
+                }
+            }
+
+
+            if (isset($categories[$article['category']])) {
+                $cat = $categories[$article['category']];
+                $newArticle->setCategory($cat);
+            }
+            $manager->persist($newArticle);
+            $manager->flush();
+            $articles[] = $newArticle;
+
+            // Création des Prestation
+            foreach ($articleServices as $service) {
+                $prestation = new Prestation();
+                $prestation
+                    ->setArticle($newArticle)
+                    ->setService($service);
+                $manager->persist($prestation);
+            }
+        }
+
 
         $manager->flush();
     }

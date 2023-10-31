@@ -30,12 +30,11 @@ class Selection
     private ?float $priceTotal = null;
 
     #[Groups('selection:read')]
-    #[ORM\ManyToOne(inversedBy: 'selections')]
-    private ?Service $services = null;
-
-    #[Groups('selection:read')]
     #[ORM\OneToMany(mappedBy: 'selection', targetEntity: Basket::class)]
     private Collection $baskets;
+
+    #[ORM\ManyToOne(inversedBy: 'selections')]
+    private ?Prestation $prestation = null;
 
     public function __construct()
     {
@@ -71,18 +70,6 @@ class Selection
         return $this;
     }
 
-    public function getServices(): ?Service
-    {
-        return $this->services;
-    }
-
-    public function setServices(?Service $services): static
-    {
-        $this->services = $services;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Basket>
      */
@@ -109,6 +96,18 @@ class Selection
                 $basket->setSelection(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPrestation(): ?Prestation
+    {
+        return $this->prestation;
+    }
+
+    public function setPrestation(?Prestation $prestation): static
+    {
+        $this->prestation = $prestation;
 
         return $this;
     }

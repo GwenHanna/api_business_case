@@ -9,38 +9,46 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['service:read']]
+)]
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
+    #[Groups(['articles:read', 'service:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('articles')]
+    #[Groups(['articles:read', 'service:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups('articles')]
+    #[Groups('service:read')]
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[Groups('articles')]
-    #[ORM\OneToMany(mappedBy: 'services', targetEntity: Selection::class)]
-    private Collection $selections;
-
-    #[Groups('articles')]
+    #[Groups(['articles:read', 'service:read'])]
     #[ORM\Column]
     private ?float $price = null;
 
-    #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'services')]
-    private Collection $articles;
+    #[Groups('service:read')]
+    #[ORM\Column(length: 255)]
+    private ?string $picture = null;
+
+    #[Groups('service:read')]
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Prestation::class)]
+    private Collection $prestations;
+
+    #[Groups('service:read')]
+    #[ORM\Column(length: 255)]
+    private ?string $category = null;
+
 
     public function __construct()
     {
-        $this->selections = new ArrayCollection();
-        $this->articles = new ArrayCollection();
+        $this->prestations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,36 +81,6 @@ class Service
     }
 
 
-    /**
-     * @return Collection<int, Selection>
-     */
-    public function getSelections(): Collection
-    {
-        return $this->selections;
-    }
-
-    public function addSelection(Selection $selection): static
-    {
-        if (!$this->selections->contains($selection)) {
-            $this->selections->add($selection);
-            $selection->setServices($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSelection(Selection $selection): static
-    {
-        if ($this->selections->removeElement($selection)) {
-            // set the owning side to null (unless ay changed)
-            if ($selection->getServices() === $this) {
-                $selection->setServices(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getPrice(): ?float
     {
         return $this->price;
@@ -115,29 +93,56 @@ class Service
         return $this;
     }
 
-    /**
-     * @return Collection<int, Article>
-     */
-    public function getArticles(): Collection
+    public function getPicture(): ?string
     {
-        return $this->articles;
+        return $this->picture;
     }
 
-    public function addArticle(Article $article): static
+    public function setPicture(string $picture): static
     {
-        if (!$this->articles->contains($article)) {
-            $this->articles->add($article);
-            $article->addService($this);
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Prestation>
+     */
+    public function getPrestations(): Collection
+    {
+        return $this->prestations;
+    }
+
+    public function addPrestation(Prestation $prestation): static
+    {
+        if (!$this->prestations->contains($prestation)) {
+            $this->prestations->add($prestation);
+            $prestation->setService($this);
         }
 
         return $this;
     }
 
-    public function removeArticle(Article $article): static
+    public function removePrestation(Prestation $prestation): static
     {
-        if ($this->articles->removeElement($article)) {
-            $article->removeService($this);
+        if ($this->prestations->removeElement($prestation)) {
+            // set the owning side to null (unless already changed)
+            if ($prestation->getService() === $this) {
+                $prestation->setService(null);
+            }
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(string $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }
