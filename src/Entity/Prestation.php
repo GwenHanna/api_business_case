@@ -8,10 +8,26 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['prestation:read']]
+    operations: [
+        new Get(
+            normalizationContext: ['groups' => ['prestation:read']]
+        ),
+        new Patch(),
+        new Delete(),
+        new GetCollection( 
+            normalizationContext: ['groups' => ['prestation:read']]  
+        ),
+        new Post(),
+    ]
+    
 )]
 #[ORM\Entity(repositoryClass: PrestationRepository::class)]
 class Prestation
@@ -21,11 +37,11 @@ class Prestation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('service:read')]
+    #[Groups(['articles:read', 'prestation:read'])]
     #[ORM\ManyToOne(inversedBy: 'prestations')]
     private ?Article $article = null;
 
-    #[Groups('articles:read')]
+    #[Groups(['articles:read', 'prestation:read'])]
     #[ORM\ManyToOne(inversedBy: 'prestations')]
     private ?Service $service = null;
 

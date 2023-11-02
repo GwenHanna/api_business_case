@@ -8,9 +8,25 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['service:read']]
+    operations: [
+        new Get(
+            normalizationContext: ['groups' => ['service:read']]
+        ),
+        new Patch(),
+        new Delete(),
+        new GetCollection( 
+            normalizationContext: ['groups' => ['service:read']] 
+        ),
+        new Post(),
+    ]
+    
 )]
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
@@ -21,7 +37,7 @@ class Service
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['articles:read', 'service:read'])]
+    #[Groups(['articles:read', 'service:read', 'prestation:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -29,7 +45,7 @@ class Service
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[Groups(['articles:read', 'service:read'])]
+    #[Groups(['articles:read', 'service:read', 'prestation:read'])]
     #[ORM\Column]
     private ?float $price = null;
 
@@ -37,7 +53,6 @@ class Service
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
-    #[Groups('service:read')]
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Prestation::class)]
     private Collection $prestations;
 

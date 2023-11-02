@@ -8,12 +8,27 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ApiResource(
-    normalizationContext: [
-        'groups' => ['articles:read']
+    operations: [
+        new Get(
+            normalizationContext:['groups' => ['articles:read']]
+        ),
+        new Patch(),
+        new Delete(),
+        new GetCollection( 
+            normalizationContext:['groups' => ['articles:read']],
+        ),
+        new Post(
+            denormalizationContext: ['groups' => ['article:post']]
+        ),
     ]
 
 )]
@@ -27,15 +42,15 @@ class Article
     private ?int $id = null;
 
 
-    #[Groups(['articles:read', 'category:read', 'service:read'])]
+    #[Groups(['articles:read', 'category:read', 'service:read', 'prestation:read','article:post'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups('articles:read')]
+    #[Groups(['articles:read', 'prestation:read', 'article:post'])]
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[Groups('articles:read')]
+    #[Groups(['articles:read','article:post'])]
     #[ORM\Column(length: 255)]
     private ?string $state = null;
 
@@ -43,7 +58,7 @@ class Article
     #[ORM\ManyToOne(inversedBy: 'articles')]
     private ?Category $category = null;
 
-    #[Groups(['articles:read', 'service:read'])]
+    #[Groups(['articles:read', 'service:read', 'prestation:read','article:post'])]
     #[ORM\Column]
     private ?float $price = null;
 

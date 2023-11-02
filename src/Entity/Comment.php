@@ -2,17 +2,37 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 
 #[ApiResource(
-    normalizationContext: [
-        'groups'    => ['comment:read']
-    ]
+    operations: [
+        new Get(
+            normalizationContext: [
+                'groups'    => ['comment:read']
+            ]
+        ),
+        new Patch(),
+        new Delete(),
+        new GetCollection( 
+            normalizationContext: [
+                'groups'    => ['comment:read']
+            ]),
+        new Post(),
+    ],
+    paginationItemsPerPage: 3
 )]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact'])]
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
@@ -33,6 +53,10 @@ class Comment
     #[Groups('comment:read')]
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?User $author = null;
+    
+    #[Groups('comment:read')]
+    #[ORM\Column(nullable: true)]
+    private ?int $score = null;
 
     public function getId(): ?int
     {
@@ -71,6 +95,18 @@ class Comment
     public function setAuthor(?User $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getScore(): ?int
+    {
+        return $this->score;
+    }
+
+    public function setScore(?int $score): static
+    {
+        $this->score = $score;
 
         return $this;
     }

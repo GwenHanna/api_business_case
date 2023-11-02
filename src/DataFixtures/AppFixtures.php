@@ -256,7 +256,8 @@ class AppFixtures extends Fixture
             $comment
                 ->setAuthor($faker->randomElement($users))
                 ->setContent($faker->realText())
-                ->setDateCreated($faker->dateTime());
+                ->setDateCreated($faker->dateTime())
+                ->setScore(rand(1,5));
             $manager->persist($comment);
         }
 

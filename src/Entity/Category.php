@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use App\Repository\CategoryRepository;
@@ -14,9 +17,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 
 #[ApiResource(
-    normalizationContext: [
-        'groups' => ['category:read']
+    operations: [
+        new Get(
+            normalizationContext: [
+                'groups' => ['category:read']
+            ]
+        ),
+        new Patch(),
+        new Delete(),
+        new GetCollection(    normalizationContext: [
+            'groups' => ['category:read']
+        ]),
+        new Post(),
     ]
+
 )]
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
