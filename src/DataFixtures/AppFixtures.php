@@ -244,7 +244,8 @@ class AppFixtures extends Fixture
                 ->setStreet($faker->streetAddress())
                 ->setRoles(["ROLE_USER"])
                 ->setZipcode($faker->postcode())
-                ->setPassword($this->hasher->hashPassword($user, 'user'));
+                ->setPassword($this->hasher->hashPassword($user, 'user'))
+                ->setDateCreated($faker->dateTime());
 
             $users[] = $user;
             $manager->persist($user);

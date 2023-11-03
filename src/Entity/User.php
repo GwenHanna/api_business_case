@@ -93,6 +93,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
     private Collection $comments;
 
+    #[Groups(['user:read', 'user:post'])]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateCreated = null;
+
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -315,4 +320,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getPlainPassword(): ?string { return $this->plainPassword; }
     public function setPlainPassword(?string $plainPassword): self { $this->plainPassword = $plainPassword; return $this; }
+
+    public function getDateCreated(): ?\DateTimeInterface
+    {
+        return $this->dateCreated;
+    }
+
+    public function setDateCreated(?\DateTimeInterface $dateCreated): static
+    {
+        $this->dateCreated = $dateCreated;
+
+        return $this;
+    }
+
+
 }
