@@ -96,7 +96,7 @@ class AppFixtures extends Fixture
             "category"  => "Tenue de jour",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
             "price"      => 10,
-            "picture"   =>  ""
+            "picture"   =>  "pants.jpg"
         ],
         [
             "name"      => "Jeans",
@@ -124,38 +124,38 @@ class AppFixtures extends Fixture
             "category"  => "Tenue de jour",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
             "price"      => 5,
-            "picture"   => ""
+            "picture"   => "tshirt.jpg"
         ],
         [
             "name"      => "Veste",
             "category"  => "Tenue de jour",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
             "price"      => 13,
-            "picture"   => ""
+            "picture"   => "jacket.jpg"
         ],
         [
             "name"      => "Robe de marier",
             "category"  => "Tenue de soirée",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
             "price"      => 45,
-            "picture"   => ""
+            "picture"   => "dress_wedding.jpg"
         ],
         [
             "name"      => "Costume",
             "category"  => "Tenue de soirée",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
             "price"      => 48,
-            "picture"   => ""
+            "picture"   => "suit.jpg"
         ],
         [
             "name"      => "Drap",
             "category"  => "Linge de maison",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Blanchiment', 'Repassage', 'Traitement anti-tâche'],
             "price"      => 5,
-            "picture"   => ""
+            "picture"   => "sheet.jpg"
         ],
         [
-            "name"      => "House de couette",
+            "name"      => "Couette",
             "category"  => "Linge de maison",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Blanchiment', 'Repassage', 'Traitement anti-tâche'],
             "price"      => 20,
@@ -166,21 +166,21 @@ class AppFixtures extends Fixture
             "category"  => "Linge de maison",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Traitement anti-tâche', 'Traitement tapis'],
             "price"      => 30,
-            "picture"   => ""
+            "picture"   => "Card_care_shut_up.jpg"
         ],
         [
             "name"      => "Sac",
             "category"  => "Maroquinerie",
             "service"   => ['Traitement anti-tâche', 'Soin du cuire'],
             "price"      => 15,
-            "picture"   => ""
+            "picture"   => "bag.jpg"
         ],
         [
             "name"      => "Ceinture",
             "category"  => "Maroquinerie",
             "service"   => ['Traitement anti-tâche', 'Soin du cuire'],
             "price"      => 8,
-            "picture"   => ""
+            "picture"   => "belt.jpg"
         ],
 
 
@@ -313,6 +313,7 @@ class AppFixtures extends Fixture
                 ->setName($article['name'])
                 ->setDescription($faker->realText())
                 ->setPrice($article['price'])
+                ->setPicture($article['picture'])
                 ->setState('');
             // ->setCategory()
 

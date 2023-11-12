@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -28,10 +30,11 @@ use ApiPlatform\Metadata\Post;
     ]
     
 )]
+#[ApiFilter(SearchFilter::class, properties:['category'])]
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
-    #[Groups(['articles:read', 'service:read'])]
+    #[Groups(['articles:read', 'service:read', 'prestation:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -56,7 +59,7 @@ class Service
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Prestation::class)]
     private Collection $prestations;
 
-    #[Groups('service:read')]
+    #[Groups(['service:read', 'prestation:read'])]
     #[ORM\Column(length: 255)]
     private ?string $category = null;
 

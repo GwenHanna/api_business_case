@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PrestationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -29,6 +31,7 @@ use ApiPlatform\Metadata\Post;
     ]
     
 )]
+#[ApiFilter(SearchFilter::class, properties:['service.id'])]
 #[ORM\Entity(repositoryClass: PrestationRepository::class)]
 class Prestation
 {

@@ -18,6 +18,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 #[ApiResource(
     operations: [
@@ -32,6 +35,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     denormalizationContext: ['groups'     => ['user:post']]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity("email", message:"This email is already in use.")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -40,6 +44,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups('user:read')]
     private ?int $id = null;
 
+    #[Assert\Email(
+        message: 'The email is not a valid email.',
+    )]
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(['user:read', 'user:post'])]
     private ?string $email = null;
@@ -52,6 +59,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\Length(
+        min: 6,
+        max: 50
+    )]
     private ?string $password = null;
 
     #[Groups('user:post')]

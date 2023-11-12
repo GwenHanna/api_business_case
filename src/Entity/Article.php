@@ -66,6 +66,10 @@ class Article
     #[ORM\OneToMany(mappedBy: 'article', targetEntity: Prestation::class)]
     private Collection $prestations;
 
+    #[Groups(['articles:read', 'prestation:read','service:read'])]
+    #[ORM\Column(length: 255)]
+    private ?string $picture = null;
+
 
     public function __construct()
     {
@@ -164,6 +168,18 @@ class Article
                 $prestation->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(string $picture): static
+    {
+        $this->picture = $picture;
 
         return $this;
     }
