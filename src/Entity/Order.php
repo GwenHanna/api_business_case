@@ -23,7 +23,9 @@ use ApiPlatform\Metadata\Post;
         new GetCollection( 
             normalizationContext: ['groups' => ['order:read']]    
         ),
-        new Post(),
+        new Post(
+            
+        ),
     ]
     
 )]
@@ -60,6 +62,11 @@ class Order
     #[Groups('order:read')]
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?Basket $basket = null;
+
+    #[Groups('order:read')]
+    #[ORM\ManyToOne(inversedBy: 'ordersAssign')]
+    private ?User $employee = null;
+
 
     public function getId(): ?int
     {
@@ -137,4 +144,17 @@ class Order
 
         return $this;
     }
+
+    public function getEmployee(): ?User
+    {
+        return $this->employee;
+    }
+
+    public function setEmployee(?User $employee): static
+    {
+        $this->employee = $employee;
+
+        return $this;
+    }
+
 }

@@ -159,7 +159,7 @@ class AppFixtures extends Fixture
             "category"  => "Linge de maison",
             "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Blanchiment', 'Repassage', 'Traitement anti-tâche'],
             "price"      => 20,
-            "picture"   => ""
+            "picture"   => "bed.jpg"
         ],
         [
             "name"      => "Tapis",
@@ -188,6 +188,7 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+       
 
         $faker = Factory::create('fr_FR');
 
@@ -297,10 +298,9 @@ class AppFixtures extends Fixture
                     ->setDepotDate($faker->dateTimeInInterval())
                     ->setPayementDate($faker->dateTimeInInterval())
                     ->setPickUpDate($faker->dateTimeBetween())
-                    ->setStatus($faker->randomElement($statuOrder));
-                if ($order->getStatus() !== 'waiting') {
-                    $order->setUser($faker->randomElement($users));
-                }
+                    ->setStatus($faker->randomElement($statuOrder))
+                    ->setUser($faker->randomElement($users));
+                
                 $manager->persist($order);
             }
         }
@@ -331,7 +331,6 @@ class AppFixtures extends Fixture
             }
             $manager->persist($newArticle);
             $manager->flush();
-            $articles[] = $newArticle;
 
             // Création des Prestation
             foreach ($articleServices as $service) {

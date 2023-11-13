@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -34,6 +36,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
     normalizationContext:   ['groups'     => ['user:read']],
     denormalizationContext: ['groups'     => ['user:post']]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['roles'])]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity("email", message:"This email is already in use.")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -41,7 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('user:read')]
+    #[Groups(['user:read', 'order:read'])]
     private ?int $id = null;
 
     #[Assert\Email(
@@ -68,7 +71,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups('user:post')]
     private ?string $plainPassword = null;
 
-    #[Groups(['user:read', 'user:post', 'comment:read'])]
+    #[Groups(['user:read', 'user:post', 'comment:read', 'order:read'])]
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
@@ -108,11 +111,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateCreated = null;
 
+    #[Groups('user:read')]
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Order::class)]
+    private Collection $ordersAssign;
+
 
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->ordersAssign = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -149,7 +157,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        // $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -340,6 +348,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDateCreated(?\DateTimeInterface $dateCreated): static
     {
         $this->dateCreated = $dateCreated;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrdersAssign(): Collection
+    {
+        return $this->ordersAssign;
+    }
+
+    public function addOrdersAssign(Order $ordersAssign): static
+    {
+        if (!$this->ordersAssign->contains($ordersAssign)) {
+            $this->ordersAssign->add($ordersAssign);
+            $ordersAssign->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrdersAssign(Order $ordersAssign): static
+    {
+        if ($this->ordersAssign->removeElement($ordersAssign)) {
+            // set the owning side to null (unless already changed)
+            if ($ordersAssign->getEmployee() === $this) {
+                $ordersAssign->setEmployee(null);
+            }
+        }
 
         return $this;
     }
