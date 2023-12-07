@@ -48,12 +48,8 @@ class Prestation
     #[ORM\ManyToOne(inversedBy: 'prestations')]
     private ?Service $service = null;
 
-    #[ORM\OneToMany(mappedBy: 'prestation', targetEntity: Selection::class)]
-    private Collection $selections;
-
     public function __construct()
     {
-        $this->selections = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -85,33 +81,5 @@ class Prestation
         return $this;
     }
 
-    /**
-     * @return Collection<int, Selection>
-     */
-    public function getSelections(): Collection
-    {
-        return $this->selections;
-    }
 
-    public function addSelection(Selection $selection): static
-    {
-        if (!$this->selections->contains($selection)) {
-            $this->selections->add($selection);
-            $selection->setPrestation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSelection(Selection $selection): static
-    {
-        if ($this->selections->removeElement($selection)) {
-            // set the owning side to null (unless already changed)
-            if ($selection->getPrestation() === $this) {
-                $selection->setPrestation(null);
-            }
-        }
-
-        return $this;
-    }
 }

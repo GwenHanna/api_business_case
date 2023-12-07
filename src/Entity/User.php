@@ -27,14 +27,21 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ApiResource(
     operations: [
         new GetCollection(),
-        new Post(processor: UserPasswordHasher::class),
-        new Get(),
+        new Post(
+            processor: UserPasswordHasher::class,
+            denormalizationContext: ['groups'     => ['user:post']]),
+        new Get(
+            normalizationContext:   ['groups'     => ['user:read']]
+        ),
         new Put(processor: UserPasswordHasher::class),
-        new Patch(processor: UserPasswordHasher::class),
-        new Delete(),
+        new Patch(
+            processor: UserPasswordHasher::class,
+            denormalizationContext: ['groups'     => ['user:patch']]),
+        new Delete(
+            denormalizationContext: ['groups'     => ['delete:post']]
+        ),
     ],
-    normalizationContext:   ['groups'     => ['user:read']],
-    denormalizationContext: ['groups'     => ['user:post']]
+    
 )]
 #[ApiFilter(SearchFilter::class, properties: ['roles'])]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -44,18 +51,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read', 'order:read'])]
+    #[Groups(['user:delete','user:read', 'order:read'])]
     private ?int $id = null;
 
     #[Assert\Email(
         message: 'The email is not a valid email.',
     )]
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user:read', 'user:post'])]
+    #[Groups(['user:delete','user:read', 'user:post', 'user:patch'])]
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(['user:read', 'user:post'])]
+    #[Groups(['user:delete','user:read', 'user:post'])]
     private array $roles = [];
 
     /**
@@ -64,55 +71,56 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     #[Assert\Length(
         min: 6,
-        max: 50
+        max: 5000
     )]
+    #[Groups('user:delete')]
     private ?string $password = null;
 
-    #[Groups('user:post')]
+    #[Groups(['user:delete','user:post','user:patch'])]
     private ?string $plainPassword = null;
 
-    #[Groups(['user:read', 'user:post', 'comment:read', 'order:read'])]
+    #[Groups(['user:delete','user:read', 'user:post', 'comment:read', 'order:read','user:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:post', 'comment:read'])]
+    #[Groups(['user:delete','user:read', 'user:post', 'comment:read','user:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
-    #[Groups(['user:read', 'user:post'])]
+    #[Groups(['user:delete','user:read', 'user:post'])]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $birthdate = null;
 
-    #[Groups(['user:read', 'user:post'])]
+    #[Groups(['user:delete','user:read', 'user:post','user:patch'])]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $gender = null;
 
-    #[Groups(['user:read', 'user:post'])]
+    #[Groups(['user:delete','user:read', 'user:post','user:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $street = null;
 
-    #[Groups(['user:read', 'user:post'])]
+    #[Groups(['user:delete','user:read', 'user:post','user:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $zipcode = null;
 
-    #[Groups(['user:read', 'user:post'])]
+    #[Groups(['user:delete','user:read', 'user:post','user:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
-    #[Groups('user:read')]
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
+    #[Groups(['user:delete','user:read'])]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class, cascade:["remove", "persist"])]
     private Collection $orders;
 
-    #[Groups('user:read')]
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class)]
+    #[Groups(['user:delete','user:read'])]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class, cascade:["remove", "persist"])]
     private Collection $comments;
 
-    #[Groups(['user:read', 'user:post'])]
+    #[Groups(['user:delete','user:read', 'user:post'])]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateCreated = null;
 
-    #[Groups('user:read')]
-    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Order::class)]
+    #[Groups(['user:delete','user:read'])]
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Order::class, cascade:["remove", "persist"])]
     private Collection $ordersAssign;
 
 

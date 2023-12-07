@@ -8,6 +8,7 @@ use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Order;
 use App\Entity\Prestation;
+use App\Entity\Section;
 use App\Entity\Selection;
 use App\Entity\Service;
 use App\Entity\User;
@@ -186,6 +187,11 @@ class AppFixtures extends Fixture
 
     ];
 
+    private const SECTION = 
+    [
+        'nettoyage', 'soins','autre'
+    ];
+
     public function load(ObjectManager $manager): void
     {
        
@@ -214,6 +220,24 @@ class AppFixtures extends Fixture
             $manager->persist($service);
             $services[$value['name']] = $service;
         }
+
+                //Création des section menu
+                foreach (self::SECTION as $key => $sectionName) {
+                    $section = new Section();
+                    $section->setName($sectionName);
+         
+                     foreach ($services as $serviceName => $service) {
+                        if($service->getCategory() === $sectionName){
+                            $service->setSection($section);
+                         $section->addService($service);
+                        }
+                     }
+                     $manager->persist($section);
+                     foreach ($section->getServices() as $service) {
+                         $service->setSection($section);
+                         $manager->persist($service);
+                     }
+                 }
 
         // Création de l'admin
         $admin = new User();
@@ -263,26 +287,12 @@ class AppFixtures extends Fixture
             $manager->persist($comment);
         }
 
-
-        $selections = [];
-        for ($i = 0; $i < self::NB_ORDERS; $i++) {
-            $selection = new Selection();
-            $selection
-                // ->setServices($faker->randomElement($services))
-                ->setQuantity($faker->randomDigitNotNull())
-                ->setPriceTotal(10);
-            $selections[] = $selection;
-            $manager->persist($selection);
-        }
-
         // Création des panier
         $statuBasket = ['waiting', 'confirmed'];
         $baskets = [];
         for ($i = 0; $i < self::NB_BASKET; $i++) {
             $basket = new Basket();
-            $basket
-                ->setSelection($faker->randomElement($selections))
-                ->setStatus($faker->randomElement($statuBasket));
+            $basket->setStatus($faker->randomElement($statuBasket));
 
             $baskets[] = $basket;
             $manager->persist($basket);
@@ -331,6 +341,11 @@ class AppFixtures extends Fixture
             }
             $manager->persist($newArticle);
             $manager->flush();
+
+            foreach ($articleServices as $service) {
+                $service->addArticle($newArticle);
+                $manager->persist($service);
+            }
 
             // Création des Prestation
             foreach ($articleServices as $service) {

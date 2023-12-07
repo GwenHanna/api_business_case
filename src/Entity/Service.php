@@ -34,13 +34,13 @@ use ApiPlatform\Metadata\Post;
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
-    #[Groups(['articles:read', 'service:read', 'prestation:read'])]
+    #[Groups(['articles:read', 'service:read', 'prestation:read', 'section:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['articles:read', 'service:read', 'prestation:read'])]
+    #[Groups(['articles:read', 'service:read', 'prestation:read', 'section:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -56,17 +56,20 @@ class Service
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
-    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Prestation::class)]
-    private Collection $prestations;
-
     #[Groups(['service:read', 'prestation:read'])]
     #[ORM\Column(length: 255)]
     private ?string $category = null;
 
+    #[ORM\ManyToOne(inversedBy: 'services')]
+    private ?Section $section = null;
+    
+    #[Groups('service:read')]
+    #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'services')]
+    private Collection $articles;
 
     public function __construct()
     {
-        $this->prestations = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -123,36 +126,6 @@ class Service
         return $this;
     }
 
-    /**
-     * @return Collection<int, Prestation>
-     */
-    public function getPrestations(): Collection
-    {
-        return $this->prestations;
-    }
-
-    public function addPrestation(Prestation $prestation): static
-    {
-        if (!$this->prestations->contains($prestation)) {
-            $this->prestations->add($prestation);
-            $prestation->setService($this);
-        }
-
-        return $this;
-    }
-
-    public function removePrestation(Prestation $prestation): static
-    {
-        if ($this->prestations->removeElement($prestation)) {
-            // set the owning side to null (unless already changed)
-            if ($prestation->getService() === $this) {
-                $prestation->setService(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getCategory(): ?string
     {
         return $this->category;
@@ -164,4 +137,41 @@ class Service
 
         return $this;
     }
+
+    public function getSection(): ?Section
+    {
+        return $this->section;
+    }
+
+    public function setSection(?Section $section): static
+    {
+        $this->section = $section;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): static
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles->add($article);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): static
+    {
+        $this->articles->removeElement($article);
+
+        return $this;
+    }
+
 }

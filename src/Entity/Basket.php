@@ -20,9 +20,6 @@ class Basket
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('basket:read')]
-    #[ORM\ManyToOne(inversedBy: 'baskets')]
-    private ?Selection $selection = null;
 
     #[Groups('basket:read')]
     #[ORM\OneToMany(mappedBy: 'basket', targetEntity: Order::class)]
@@ -40,18 +37,6 @@ class Basket
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getSelection(): ?Selection
-    {
-        return $this->selection;
-    }
-
-    public function setSelection(?Selection $selection): static
-    {
-        $this->selection = $selection;
-
-        return $this;
     }
 
     /**

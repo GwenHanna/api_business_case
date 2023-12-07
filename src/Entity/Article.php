@@ -70,10 +70,14 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
+    #[ORM\ManyToMany(targetEntity: Service::class, mappedBy: 'articles')]
+    private Collection $services;
+
 
     public function __construct()
     {
         $this->prestations = new ArrayCollection();
+        $this->services = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -183,4 +187,32 @@ class Article
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Service>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(Service $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->addArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeService(Service $service): static
+    {
+        if ($this->services->removeElement($service)) {
+            $service->removeArticle($this);
+        }
+
+        return $this;
+    }
+
 }
