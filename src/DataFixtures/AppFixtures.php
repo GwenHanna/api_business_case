@@ -323,8 +323,7 @@ class AppFixtures extends Fixture
                 ->setName($article['name'])
                 ->setDescription($faker->realText())
                 ->setPrice($article['price'])
-                ->setPicture($article['picture'])
-                ->setState('');
+                ->setPicture($article['picture']);
             // ->setCategory()
 
             $articleServices = [];

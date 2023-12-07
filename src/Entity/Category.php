@@ -40,10 +40,10 @@ class Category
     #[ORM\GeneratedValue]
     #[ORM\Column]
 
-    #[Groups(['articles:read', 'category:read'])]
+    #[Groups(['articles:read', 'category:read','articles:post:read'])]
     private ?int $id = null;
 
-    #[Groups(['category:read', 'articles:read'])]
+    #[Groups(['category:read', 'articles:read','articles:post:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 

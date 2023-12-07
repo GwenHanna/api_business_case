@@ -40,7 +40,7 @@ class Service
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['articles:read', 'service:read', 'prestation:read', 'section:read'])]
+    #[Groups(['articles:read', 'service:read', 'prestation:read', 'section:read', 'articles:post'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 

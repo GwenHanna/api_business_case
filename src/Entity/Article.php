@@ -24,10 +24,12 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
         new Patch(),
         new Delete(),
         new GetCollection( 
-            normalizationContext:['groups' => ['articles:read']],
+            normalizationContext:['groups' => ['articles:read', 'articles:post:read']],
+            denormalizationContext: ['groups' => ['article:post']],
         ),
         new Post(
-            denormalizationContext: ['groups' => ['article:post']]
+            denormalizationContext: ['groups' => ['article:post']],
+            normalizationContext:['groups' => ['articles:post:read']]
         ),
     ]
 
@@ -42,23 +44,19 @@ class Article
     private ?int $id = null;
 
 
-    #[Groups(['articles:read', 'category:read', 'service:read', 'prestation:read','article:post'])]
+    #[Groups(['articles:read', 'category:read', 'service:read', 'prestation:read','article:post', 'articles:post:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['articles:read', 'prestation:read', 'article:post'])]
+    #[Groups(['articles:read', 'prestation:read', 'article:post', 'articles:post:read'])]
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[Groups(['articles:read','article:post'])]
-    #[ORM\Column(length: 255)]
-    private ?string $state = null;
-
-    #[Groups('articles:read')]
+    #[Groups(['articles:read', 'article:post', 'articles:post:read'])]
     #[ORM\ManyToOne(inversedBy: 'articles')]
     private ?Category $category = null;
 
-    #[Groups(['articles:read', 'service:read', 'prestation:read','article:post'])]
+    #[Groups(['articles:read', 'service:read', 'prestation:read','article:post', 'articles:post:read'])]
     #[ORM\Column]
     private ?float $price = null;
 
@@ -66,10 +64,11 @@ class Article
     #[ORM\OneToMany(mappedBy: 'article', targetEntity: Prestation::class)]
     private Collection $prestations;
 
-    #[Groups(['articles:read', 'prestation:read','service:read'])]
+    #[Groups(['articles:read', 'prestation:read','service:read','article:post', 'articles:post:read'])]
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
+    #[Groups('articles:post')]
     #[ORM\ManyToMany(targetEntity: Service::class, mappedBy: 'articles')]
     private Collection $services;
 
@@ -109,17 +108,7 @@ class Article
         return $this;
     }
 
-    public function getState(): ?string
-    {
-        return $this->state;
-    }
 
-    public function setState(string $state): static
-    {
-        $this->state = $state;
-
-        return $this;
-    }
 
 
     public function getCategory(): ?Category
