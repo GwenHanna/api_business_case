@@ -16,12 +16,17 @@ use ApiPlatform\Metadata\Get;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+
 #[ApiResource(
     operations: [
         new Get(
             normalizationContext:['groups' => ['articles:read']]
         ),
-        new Patch(),
+        new Patch(
+            normalizationContext:['groups' => ['articles:patch:read']],
+            denormalizationContext: ['groups' => ['article:patch']]
+        ),
         new Delete(),
         new GetCollection( 
             normalizationContext:['groups' => ['articles:read', 'articles:post:read']],
@@ -60,7 +65,6 @@ class Article
     #[ORM\Column]
     private ?float $price = null;
 
-    #[Groups('articles:read')]
     #[ORM\OneToMany(mappedBy: 'article', targetEntity: Prestation::class)]
     private Collection $prestations;
 
@@ -68,16 +72,23 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
-    #[Groups('articles:post')]
+    #[Groups(['article:post', 'articles:post:read'])]
     #[ORM\ManyToMany(targetEntity: Service::class, mappedBy: 'articles')]
     private Collection $services;
 
+    #[ApiProperty(
+        iris: 'http://localhost:8000/api/articles'
+    )]
+    #[Groups('article:read')]
+  private $totalPrice = '';
 
     public function __construct()
     {
         $this->prestations = new ArrayCollection();
         $this->services = new ArrayCollection();
     }
+
+  
 
     public function getId(): ?int
     {
@@ -202,6 +213,15 @@ class Article
         }
 
         return $this;
+    }
+
+    public function getPrestation() {
+        $this->totalPrice = $this->price;
+        foreach ($this->services as $service) {
+            $this->totalPrice += $service->getPrice();
+        }
+
+        return $this->totalPrice;
     }
 
 }

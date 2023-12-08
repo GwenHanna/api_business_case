@@ -40,11 +40,11 @@ class Prestation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['articles:read', 'prestation:read'])]
+    #[Groups( 'prestation:read')]
     #[ORM\ManyToOne(inversedBy: 'prestations')]
     private ?Article $article = null;
 
-    #[Groups(['articles:read', 'prestation:read'])]
+    #[Groups( 'prestation:read')]
     #[ORM\ManyToOne(inversedBy: 'prestations')]
     private ?Service $service = null;
 
