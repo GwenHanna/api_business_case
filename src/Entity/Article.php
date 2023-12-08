@@ -72,7 +72,7 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
-    #[Groups(['article:post', 'articles:post:read'])]
+    #[Groups(['articles:read','article:post', 'articles:post:read'])]
     #[ORM\ManyToMany(targetEntity: Service::class, mappedBy: 'articles')]
     private Collection $services;
 
