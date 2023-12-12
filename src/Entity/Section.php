@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\SectionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,21 +14,27 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use Symfony\Component\Serializer\Annotation\Groups;
-
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\Put;
 
 #[ApiResource(
     operations: [
         new Get(
             normalizationContext: ['groups' => ['section:read']]
         ),
-        new Patch(),
+        new Patch(
+            denormalizationContext: ['groups' => ['section:patch']]
+        ),
         new Delete(),
         new GetCollection( 
             normalizationContext: ['groups' => ['section:read']]  
         ),
-        new Post(),
+        new Post(
+            denormalizationContext: ['groups' => ['section:post']] 
+        )
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'exact'])]
 #[ORM\Entity(repositoryClass: SectionRepository::class)]
 class Section
 {
@@ -36,11 +43,11 @@ class Section
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('section:read')]
+    #[Groups(['section:read','section:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups('section:read')]
+    #[Groups(['section:read','section:patch'])]
     #[ORM\OneToMany(mappedBy: 'section', targetEntity: Service::class)]
     private Collection $services;
 

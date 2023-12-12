@@ -95,56 +95,56 @@ class AppFixtures extends Fixture
         [
             "name"      => "Pantalon",
             "category"  => "Tenue de jour",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
+            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
             "price"      => 10,
             "picture"   =>  "pants.jpg"
         ],
         [
             "name"      => "Jeans",
             "category"  => "Tenue de jour",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
+            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
             "price"      => 10,
             "picture"   =>  "jeans.jpg"
         ],
         [
             "name"      => "Robe",
             "category"  => "Tenue de jour",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
+            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
             "price"      => 12,
             "picture"   =>  "dress.jpg"
         ],
         [
             "name"      => "Chemise",
             "category"  => "Tenue de jour",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
+            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
             "price"      => 8,
             "picture"   => "sweater.jpg"
         ],
         [
             "name"      => "Tee-shirt",
             "category"  => "Tenue de jour",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
+            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
             "price"      => 5,
             "picture"   => "tshirt.jpg"
         ],
         [
             "name"      => "Veste",
             "category"  => "Tenue de jour",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
+            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
             "price"      => 13,
             "picture"   => "jacket.jpg"
         ],
         [
             "name"      => "Robe de marier",
             "category"  => "Tenue de soirée",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
+            "service"   => [ 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
             "price"      => 45,
             "picture"   => "dress_wedding.jpg"
         ],
         [
             "name"      => "Costume",
             "category"  => "Tenue de soirée",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage', 'Traitement anti-tâche'],
+            "service"   => ['Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
             "price"      => 48,
             "picture"   => "suit.jpg"
         ],
@@ -158,28 +158,28 @@ class AppFixtures extends Fixture
         [
             "name"      => "Couette",
             "category"  => "Linge de maison",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Blanchiment', 'Repassage', 'Traitement anti-tâche'],
+            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Blanchiment', 'Traitement anti-tâche'],
             "price"      => 20,
             "picture"   => "bed.jpg"
         ],
         [
             "name"      => "Tapis",
             "category"  => "Linge de maison",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Traitement anti-tâche', 'Traitement tapis'],
+            "service"   => [ 'Traitement anti-tâche', 'Traitement tapis'],
             "price"      => 30,
             "picture"   => "Card_care_shut_up.jpg"
         ],
         [
             "name"      => "Sac",
             "category"  => "Maroquinerie",
-            "service"   => ['Traitement anti-tâche', 'Soin du cuire'],
+            "service"   => [ 'Soin du cuire', 'Nettoyage du cuire'],
             "price"      => 15,
             "picture"   => "bag.jpg"
         ],
         [
             "name"      => "Ceinture",
             "category"  => "Maroquinerie",
-            "service"   => ['Traitement anti-tâche', 'Soin du cuire'],
+            "service"   => ['Soin du cuire', 'Nettoyage du cuire'],
             "price"      => 8,
             "picture"   => "belt.jpg"
         ],
@@ -242,9 +242,9 @@ class AppFixtures extends Fixture
         // Création de l'admin
         $admin = new User();
         $admin
-            ->setFirstname($faker->firstName())
-            ->setLastname($faker->lastName())
-            ->setGender($faker->title())
+            ->setFirstname('Gwendoline')
+            ->setLastname('Garlet')
+            ->setGender('Mlle')
             ->setEmail('admin@admin.com')
             ->setBirthdate($faker->dateTime())
             ->setCity($faker->city())
@@ -257,7 +257,23 @@ class AppFixtures extends Fixture
 
         // Création des utilisateurs
         $users = [];
-        for ($i = 0; $i < self::NB_USER; $i++) {
+        $userCustom = new User();
+        $userCustom
+        ->setFirstname($faker->firstName())
+        ->setLastname($faker->lastName())
+        ->setGender($faker->title())
+        ->setEmail('gwen@user.com')
+        ->setBirthdate($faker->dateTime())
+        ->setCity($faker->city())
+        ->setStreet($faker->streetAddress())
+        ->setRoles(["ROLE_USER", "ROLE-EMPLOYEE"])
+        ->setZipcode($faker->postcode())
+        ->setPassword($this->hasher->hashPassword($userCustom, 'user123'))
+        ->setDateCreated($faker->dateTime());
+
+        $manager->persist($userCustom);
+
+        for ($i = 0; $i < self::NB_USER - 1; $i++) {
             $user = new User();
             $user
                 ->setFirstname($faker->firstName())
@@ -269,7 +285,7 @@ class AppFixtures extends Fixture
                 ->setStreet($faker->streetAddress())
                 ->setRoles(["ROLE_USER"])
                 ->setZipcode($faker->postcode())
-                ->setPassword($this->hasher->hashPassword($user, 'user'))
+                ->setPassword($this->hasher->hashPassword($user, 'user123'))
                 ->setDateCreated($faker->dateTime());
 
             $users[] = $user;

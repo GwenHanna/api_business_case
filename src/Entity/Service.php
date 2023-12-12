@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 
 #[ApiResource(
     operations: [
@@ -26,46 +27,51 @@ use ApiPlatform\Metadata\Post;
         new GetCollection( 
             normalizationContext: ['groups' => ['service:read']] 
         ),
-        new Post(),
+        new Post(
+            denormalizationContext:['groups' => ['service:post']]
+        ),
+
     ]
     
 )]
+
 #[ApiFilter(SearchFilter::class, properties:['category'])]
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
-    #[Groups(['articles:read', 'service:read', 'prestation:read', 'section:read'])]
+    #[Groups(['articles:read', 'service:read', 'prestation:read', 'section:read', 'service:post'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['articles:read', 'service:read', 'prestation:read', 'section:read', 'articles:post'])]
+    #[Groups(['articles:read', 'service:read', 'prestation:read', 'section:read', 'articles:post', 'service:post','section:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups('service:read')]
+    #[Groups(['service:read','service:post', 'section:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[Groups(['articles:read', 'service:read', 'prestation:read'])]
+    #[Groups(['articles:read', 'service:read', 'prestation:read', 'service:post','section:patch'])]
     #[ORM\Column]
     private ?float $price = null;
 
-    #[Groups('service:read')]
+    #[Groups(['service:read','section:read', 'service:post', 'section:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
-    #[Groups(['service:read', 'prestation:read'])]
+    #[Groups(['service:read', 'prestation:read', 'service:post','section:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $category = null;
 
-    #[ORM\ManyToOne(inversedBy: 'services')]
+    #[ORM\ManyToOne(inversedBy: 'services', cascade: ['persist'])]
     private ?Section $section = null;
     
-    #[Groups('service:read')]
+    #[Groups(['service:read', 'service:post'])]
     #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'services')]
     private Collection $articles;
+
 
     public function __construct()
     {
