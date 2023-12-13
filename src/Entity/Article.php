@@ -73,14 +73,9 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
-    #[Groups(['articles:read','article:post', 'articles:post:read'])]
-    #[ORM\ManyToMany(targetEntity: Service::class, mappedBy: 'articles')]
-    private Collection $services;
-
     public function __construct()
     {
         $this->prestations = new ArrayCollection();
-        $this->services = new ArrayCollection();
     }
 
   
@@ -183,36 +178,13 @@ class Article
         return $this;
     }
 
-    /**
-     * @return Collection<int, Service>
-     */
-    public function getServices(): Collection
-    {
-        return $this->services;
-    }
-
-    public function addService(Service $service): static
-    {
-        if (!$this->services->contains($service)) {
-            $this->services->add($service);
-            $service->addArticle($this);
-        }
-
-        return $this;
-    }
-
-    public function removeService(Service $service): static
-    {
-        if ($this->services->removeElement($service)) {
-            $service->removeArticle($this);
-        }
-
-        return $this;
-    }
 
     #[Groups('articles:read')]
     #[ApiProperty()]
     private ?string $code = null;
+
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    private ?Service $service = null;
 
     /**
      * Get the value of code
@@ -220,6 +192,18 @@ class Article
     public function getCode()
     {
 
-        return $this->getServices()[0]->getName() . '_' . $this->getName();
+        // return $this->getServices()[0]->getName() . '_' . $this->getName();
+    }
+
+    public function getService(): ?Service
+    {
+        return $this->service;
+    }
+
+    public function setService(?Service $service): static
+    {
+        $this->service = $service;
+
+        return $this;
     }
 }

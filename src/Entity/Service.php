@@ -67,11 +67,9 @@ class Service
 
     #[ORM\ManyToOne(inversedBy: 'services', cascade: ['persist'])]
     private ?Section $section = null;
-    
-    #[Groups(['service:read', 'service:post'])]
-    #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'services')]
-    private Collection $articles;
 
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Article::class)]
+    private Collection $articles;
 
     public function __construct()
     {
@@ -168,6 +166,7 @@ class Service
     {
         if (!$this->articles->contains($article)) {
             $this->articles->add($article);
+            $article->setService($this);
         }
 
         return $this;
@@ -175,7 +174,12 @@ class Service
 
     public function removeArticle(Article $article): static
     {
-        $this->articles->removeElement($article);
+        if ($this->articles->removeElement($article)) {
+            // set the owning side to null (unless already changed)
+            if ($article->getService() === $this) {
+                $article->setService(null);
+            }
+        }
 
         return $this;
     }
