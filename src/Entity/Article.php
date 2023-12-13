@@ -14,14 +14,14 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\SerializedName;
-
-use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 #[ApiResource(
+    paginationEnabled:false,
+
     operations: [
         new Get(
-            normalizationContext:['groups' => ['articles:read']]
+            normalizationContext:['groups' => ['articles:read']],
+            
         ),
         new Patch(
             normalizationContext:['groups' => ['articles:patch:read']],
@@ -34,7 +34,7 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
         ),
         new Post(
             denormalizationContext: ['groups' => ['article:post']],
-            normalizationContext:['groups' => ['articles:post:read']]
+            normalizationContext:['groups' => ['articles:post:read']],
         ),
     ]
 
@@ -47,6 +47,7 @@ class Article
     #[ORM\Column]
     #[Groups('articles:read')]
     private ?int $id = null;
+
 
 
     #[Groups(['articles:read', 'category:read', 'service:read', 'prestation:read','article:post', 'articles:post:read'])]
@@ -75,12 +76,6 @@ class Article
     #[Groups(['articles:read','article:post', 'articles:post:read'])]
     #[ORM\ManyToMany(targetEntity: Service::class, mappedBy: 'articles')]
     private Collection $services;
-
-    #[ApiProperty(
-        iris: 'http://localhost:8000/api/articles'
-    )]
-    #[Groups('article:read')]
-  private $totalPrice = '';
 
     public function __construct()
     {
@@ -215,13 +210,16 @@ class Article
         return $this;
     }
 
-    public function getPrestation() {
-        $this->totalPrice = $this->price;
-        foreach ($this->services as $service) {
-            $this->totalPrice += $service->getPrice();
-        }
+    #[Groups('articles:read')]
+    #[ApiProperty()]
+    private ?string $code = null;
 
-        return $this->totalPrice;
+    /**
+     * Get the value of code
+     */ 
+    public function getCode()
+    {
+
+        return $this->getServices()[0]->getName() . '_' . $this->getName();
     }
-
 }
