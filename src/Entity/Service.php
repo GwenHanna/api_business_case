@@ -2,78 +2,75 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
 use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
+    paginationEnabled:false,
+
     operations: [
         new Get(
-            normalizationContext: ['groups' => ['service:read']]
+            normalizationContext:['groups' => ['service:read']],
+            
         ),
-        new Patch(),
+        new Patch(
+            normalizationContext:['groups' => ['service:patch:read']],
+            denormalizationContext: ['groups' => ['service:patch']]
+        ),
         new Delete(),
         new GetCollection( 
-            normalizationContext: ['groups' => ['service:read']] 
+            normalizationContext:['groups' => ['service:read']],
+            denormalizationContext: ['groups' => ['service:post']],
         ),
         new Post(
-            denormalizationContext:['groups' => ['service:post']]
+            normalizationContext:['groups' => ['service:read']],
+            denormalizationContext: ['groups' => ['service:post']],
         ),
-
     ]
-    
-)]
 
-#[ApiFilter(SearchFilter::class, properties:['category'])]
+)]
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
-    #[Groups(['articles:read', 'service:read', 'prestation:read', 'section:read', 'service:post'])]
+
+    #[Groups('service:read')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['articles:read', 'service:read', 'prestation:read', 'section:read', 'articles:post', 'service:post','section:patch'])]
+    #[Groups(['service:read','serviceType:read','service:post'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['service:read','service:post', 'section:patch'])]
-    #[ORM\Column(length: 255)]
-    private ?string $description = null;
-
-    #[Groups(['articles:read', 'service:read', 'prestation:read', 'service:post','section:patch'])]
+    #[Groups(['service:read','service:post'])]
     #[ORM\Column]
     private ?float $price = null;
 
-    #[Groups(['service:read','section:read', 'service:post', 'section:patch'])]
+    #[Groups(['service:read', 'service:post', 'service:post'])]
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
-    #[Groups(['service:read', 'prestation:read', 'service:post','section:patch'])]
-    #[ORM\Column(length: 255)]
-    private ?string $category = null;
+    #[ORM\OneToMany(mappedBy: 'article', targetEntity: Selection::class)]
+    private Collection $selections;
 
-    #[ORM\ManyToOne(inversedBy: 'services', cascade: ['persist'])]
-    private ?Section $section = null;
 
-    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Article::class)]
-    private Collection $articles;
+    #[Groups(['service:read','service:post'])]
+    #[ORM\ManyToOne(inversedBy: 'service')]
+    private ?ServiceType $serviceType = null;
 
     public function __construct()
     {
-        $this->articles = new ArrayCollection();
+        $this->selections = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -92,19 +89,6 @@ class Service
 
         return $this;
     }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): static
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
 
     public function getPrice(): ?float
     {
@@ -130,58 +114,45 @@ class Service
         return $this;
     }
 
-    public function getCategory(): ?string
-    {
-        return $this->category;
-    }
-
-    public function setCategory(string $category): static
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    public function getSection(): ?Section
-    {
-        return $this->section;
-    }
-
-    public function setSection(?Section $section): static
-    {
-        $this->section = $section;
-
-        return $this;
-    }
-
     /**
-     * @return Collection<int, Article>
+     * @return Collection<int, Selection>
      */
-    public function getArticles(): Collection
+    public function getSelections(): Collection
     {
-        return $this->articles;
+        return $this->selections;
     }
 
-    public function addArticle(Article $article): static
+    public function addSelection(Selection $selection): static
     {
-        if (!$this->articles->contains($article)) {
-            $this->articles->add($article);
-            $article->setService($this);
+        if (!$this->selections->contains($selection)) {
+            $this->selections->add($selection);
+            $selection->setService($this);
         }
 
         return $this;
     }
 
-    public function removeArticle(Article $article): static
+    public function removeSelection(Selection $selection): static
     {
-        if ($this->articles->removeElement($article)) {
+        if ($this->selections->removeElement($selection)) {
             // set the owning side to null (unless already changed)
-            if ($article->getService() === $this) {
-                $article->setService(null);
+            if ($selection->getService() === $this) {
+                $selection->setService(null);
             }
         }
 
         return $this;
     }
 
+    public function getServiceType(): ?ServiceType
+    {
+        return $this->serviceType;
+    }
+
+    public function setServiceType(?ServiceType $serviceType): static
+    {
+        $this->serviceType = $serviceType;
+
+        return $this;
+    }
 }

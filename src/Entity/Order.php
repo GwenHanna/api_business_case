@@ -60,10 +60,6 @@ class Order
     private ?User $user = null;
 
     #[Groups('order:read')]
-    #[ORM\ManyToOne(inversedBy: 'orders')]
-    private ?Basket $basket = null;
-
-    #[Groups('order:read')]
     #[ORM\ManyToOne(inversedBy: 'ordersAssign')]
     private ?User $employee = null;
 
@@ -129,18 +125,6 @@ class Order
     public function setUser(?User $user): static
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getBasket(): ?Basket
-    {
-        return $this->basket;
-    }
-
-    public function setBasket(?Basket $basket): static
-    {
-        $this->basket = $basket;
 
         return $this;
     }

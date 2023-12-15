@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Article;
 use App\Entity\Basket;
 use App\Entity\Category;
 use App\Entity\Comment;
@@ -11,6 +10,7 @@ use App\Entity\Prestation;
 use App\Entity\Section;
 use App\Entity\Selection;
 use App\Entity\Service;
+use App\Entity\ServiceType;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -28,350 +28,609 @@ class AppFixtures extends Fixture
     private const NB_COMMENT = 10;
     private const NB_ORDERS = 5;
     private const NB_BASKET = 5;
-    private const CATEGORIES = ['Tenue de jour', 'Tenue de soirée', 'Linge de maison', 'Linge de lit', 'Maroquinerie', 'Tenue de soirée'];
-    private const SERVICE =
+    private const SECTION = 
+    [
+        'nettoyage', 'soins', 'autre'
+    ];
+    private const SERVICES_TYPE = 
     [
         [
             'name' => 'Nettoyage à sec',
-            'price' => 4,
-            'picture'   =>  'dry_cleaning.jpg',
-            'category' => 'nettoyage'
+            'picture' => 'dry_cleaning.jpg',
+            'section' => self::SECTION[0]
         ],
         [
             'name' => 'Nettoyage linge délicat',
-            'price' => 8,
-            'picture'   => 'Card_clean_delicate.jpg',
-            'category' => 'nettoyage'
-        ],
-        [
-            'name' => 'Réparation de vêtement',
-            'price' => 0,
-            'picture'   => 'reparation.jpg',
-            'category' => 'autre'
+            'picture' => 'Card_clean_delicate.jpg',
+            'section' => self::SECTION[0]
         ],
         [
             'name' => 'Nettoyage du cuire',
-            'price' => 1,
-            'picture'   => 'clean_leather.jpg',
-            'category' => 'nettoyage'
-
+            'picture' => 'care_leather.jpg',
+            'section' => self::SECTION[0]
         ],
-
+        [
+            'name' => 'Réparation de vêtement',
+            'picture' => 'reparation.jpg',
+            'section' => self::SECTION[2]
+        ],
         [
             'name' => 'Repassage',
-            'price' => 3,
-            'picture'   => 'ironing.jpg',
-            'category' => 'autre'
+            'picture' => 'ironing.jpg',
+            'section' => self::SECTION[1]
         ],
         [
             'name' => 'Blanchiment',
-            'price' => 5,
-            'picture'   => 'Card_care_whitening.jpg',
-            'category' => 'soins'
+            'picture' => 'ironing.jpg',
+            'section' => self::SECTION[2]
         ],
         [
             'name' => 'Traitement anti-tâche',
-            'price' => 5,
-            'picture'   => 'Card_anti_stain.jpg',
-            'category' => 'soins'
+            'picture' => 'Card_anti_stain.jpg',
+            'section' => self::SECTION[2]
+
         ],
         [
             'name' => 'Traitement tapis',
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'category' => 'soins'
+            'picture' => 'Card_care_shut_up.jpg',
+            'section' => self::SECTION[2]
 
         ],
         [
             'name' => 'Soin du cuire',
+            'picture' => 'clean_leather.jpg',
+            'section' => self::SECTION[2]
+
+        ],
+    ];
+
+    private const GARMENT = 
+    [
+        'Jeans','Pantalon en Lin','Pantalon Acrylique ','Robe Acrylique', 'Robe en Soie','Chemise', 'Tee-shirt', 'Veste','Robe de marier','Costume','Couette', 'Drap','Ceinture', 'Sac','Tapis'
+    ];
+
+    private const SERVICES =
+    [
+        [
+            'name'  => self::GARMENT[0],
+            'service' => self::SERVICES_TYPE[0],
+            'price' => 4,
+            'picture'   =>  'dry_cleaning.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => self::GARMENT[0],
+            'service' => self::SERVICES_TYPE[3],
+            'price' => 8,
+            'picture'   => 'Card_clean_delicate.jpg',
+            'section' => 'autre'
+        ],
+        [
+            'name'  => self::GARMENT[0],
+            'service' => self::SERVICES_TYPE[4],
+            'price' => 0,
+            'picture'   => 'reparation.jpg',
+            'section' => 'autre'
+        ],
+        [
+            'name'  => self::GARMENT[1],
+            'service' => self::SERVICES_TYPE[0],
             'price' => 1,
-            'picture'   => 'care_leather.jpg',
-            'category' => 'soins'
-        ]
+            'picture'   => 'clean_leather.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[1],
+            'service' => self::SERVICES_TYPE[1],
+            'price' => 1,
+            'picture'   => 'clean_leather.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[1],
+            'service' => self::SERVICES_TYPE[3],
+            'price' => 1,
+            'picture'   => 'clean_leather.jpg',
+            'section' => 'autre'
+
+        ],
+        [
+            'name'  => self::GARMENT[1],
+            'service' => self::SERVICES_TYPE[4],
+            'price' => 1,
+            'picture'   => 'clean_leather.jpg',
+            'section' => 'autre'
+
+        ],
+        [
+            'name'  => self::GARMENT[2],
+            'service' => self::SERVICES_TYPE[0],
+            'price' => 3,
+            'picture'   => 'ironing.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => self::GARMENT[2],
+            'service' => self::SERVICES_TYPE[3],
+            'price' => 3,
+            'picture'   => 'ironing.jpg',
+            'section' => 'autre'
+        ],
+        [
+            'name'  => self::GARMENT[3],
+            'service' => self::SERVICES_TYPE[0],
+            'price' => 5,
+            'picture'   => 'Card_care_whitening.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => self::GARMENT[3],
+            'service' => self::SERVICES_TYPE[3],
+            'price' => 5,
+            'picture'   => 'Card_care_whitening.jpg',
+            'section' => 'autre'
+        ],
+        [
+            'name'  => self::GARMENT[3],
+            'service' => self::SERVICES_TYPE[4],
+            'price' => 5,
+            'picture'   => 'Card_care_whitening.jpg',
+            'section' => 'autre'
+        ],
+        [
+            'name'  => self::GARMENT[4],
+            'service' => self::SERVICES_TYPE[1],
+            'price' => 5,
+            'picture'   => 'Card_anti_stain.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => self::GARMENT[4],
+            'service' => self::SERVICES_TYPE[4],
+            'price' => 5,
+            'picture'   => 'Card_anti_stain.jpg',
+            'section' => 'autre'
+        ],
+        [
+            'name'  => self::GARMENT[4],
+            'service' => self::SERVICES_TYPE[4],
+            'price' => 5,
+            'picture'   => 'Card_anti_stain.jpg',
+            'section' => 'autre'
+        ],
+        [
+            'name'  => self::GARMENT[5],
+            'service' => self::SERVICES_TYPE[0],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[5],
+            'service' => self::SERVICES_TYPE[1],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[5],
+            'service' => self::SERVICES_TYPE[3],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'autre'
+
+        ],
+        [
+            'name'  => self::GARMENT[5],
+            'service' => self::SERVICES_TYPE[4],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'autre'
+
+        ],
+        [
+            'name'  => self::GARMENT[5],
+            'service' => self::SERVICES_TYPE[0],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[6],
+            'service' => self::SERVICES_TYPE[1],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[6],
+            'service' => self::SERVICES_TYPE[3],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'autre'
+
+        ],
+        [
+            'name'  => self::GARMENT[6],
+            'service' => self::SERVICES_TYPE[4],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'autre'
+
+        ],
+        [
+            'name'  => self::GARMENT[7],
+            'service' => self::SERVICES_TYPE[0],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[7],
+            'service' => self::SERVICES_TYPE[1],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[7],
+            'service' => self::SERVICES_TYPE[3],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'autre'
+
+        ],
+        [
+            'name'  => self::GARMENT[7],
+            'service' => self::SERVICES_TYPE[4],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'autre'
+
+        ],
+        [
+            'name'  => self::GARMENT[9],
+            'service' => self::SERVICES_TYPE[0],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[9],
+            'service' => self::SERVICES_TYPE[1],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[9],
+            'service' => self::SERVICES_TYPE[3],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'autre'
+
+        ],
+        [
+            'name'  => self::GARMENT[9],
+            'service' => self::SERVICES_TYPE[4],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'autre'
+
+        ],
+
+        [
+            'name'  => self::GARMENT[10],
+            'service' => self::SERVICES_TYPE[0],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[10],
+            'service' => self::SERVICES_TYPE[1],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[10],
+            'service' => self::SERVICES_TYPE[5],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => self::SERVICES_TYPE[5]
+
+        ],
+        [
+            'name'  => self::GARMENT[11],
+            'service' => self::SERVICES_TYPE[0],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[11],
+            'service' => self::SERVICES_TYPE[1],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[11],
+            'service' => self::SERVICES_TYPE[5],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => self::SERVICES_TYPE[5]
+
+        ],
+
+        [
+            'name'  => self::GARMENT[12],
+            'service' => self::SERVICES_TYPE[2],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[12],
+            'service' => self::SERVICES_TYPE[8],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'soins'
+
+        ],
+        [
+            'name'  => self::GARMENT[13],
+            'service' => self::SERVICES_TYPE[2],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+
+        ],
+        [
+            'name'  => self::GARMENT[13],
+            'service' => self::SERVICES_TYPE[8],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'soins'
+
+        ],
+        [
+            'name'  => self::GARMENT[14],
+            'service' => self::SERVICES_TYPE[7],
+            'price' => 1,
+            'picture'   => 'Card_care_shut_up.jpg',
+            'section' => 'autre'
+
+        ],
+      
     ];
 
-    private const ARTICLES =
-    [
-        [
-            "name"      => "Pantalon",
-            "category"  => "Tenue de jour",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-            "price"      => 10,
-            "picture"   =>  "pants.jpg"
-        ],
-        [
-            "name"      => "Jeans",
-            "category"  => "Tenue de jour",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-            "price"      => 10,
-            "picture"   =>  "jeans.jpg"
-        ],
-        [
-            "name"      => "Robe",
-            "category"  => "Tenue de jour",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-            "price"      => 12,
-            "picture"   =>  "dress.jpg"
-        ],
-        [
-            "name"      => "Chemise",
-            "category"  => "Tenue de jour",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-            "price"      => 8,
-            "picture"   => "sweater.jpg"
-        ],
-        [
-            "name"      => "Tee-shirt",
-            "category"  => "Tenue de jour",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-            "price"      => 5,
-            "picture"   => "tshirt.jpg"
-        ],
-        [
-            "name"      => "Veste",
-            "category"  => "Tenue de jour",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-            "price"      => 13,
-            "picture"   => "jacket.jpg"
-        ],
-        [
-            "name"      => "Robe de marier",
-            "category"  => "Tenue de soirée",
-            "service"   => [ 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-            "price"      => 45,
-            "picture"   => "dress_wedding.jpg"
-        ],
-        [
-            "name"      => "Costume",
-            "category"  => "Tenue de soirée",
-            "service"   => ['Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-            "price"      => 48,
-            "picture"   => "suit.jpg"
-        ],
-        [
-            "name"      => "Drap",
-            "category"  => "Linge de maison",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Blanchiment', 'Repassage', 'Traitement anti-tâche'],
-            "price"      => 5,
-            "picture"   => "sheet.jpg"
-        ],
-        [
-            "name"      => "Couette",
-            "category"  => "Linge de maison",
-            "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Blanchiment', 'Traitement anti-tâche'],
-            "price"      => 20,
-            "picture"   => "bed.jpg"
-        ],
-        [
-            "name"      => "Tapis",
-            "category"  => "Linge de maison",
-            "service"   => [ 'Traitement anti-tâche', 'Traitement tapis'],
-            "price"      => 30,
-            "picture"   => "Card_care_shut_up.jpg"
-        ],
-        [
-            "name"      => "Sac",
-            "category"  => "Maroquinerie",
-            "service"   => [ 'Soin du cuire', 'Nettoyage du cuire'],
-            "price"      => 15,
-            "picture"   => "bag.jpg"
-        ],
-        [
-            "name"      => "Ceinture",
-            "category"  => "Maroquinerie",
-            "service"   => ['Soin du cuire', 'Nettoyage du cuire'],
-            "price"      => 8,
-            "picture"   => "belt.jpg"
-        ],
+    // private const SERVICES =
+    // [
+    //     [
+    //         "name"      => "Pantalon",
+    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
+    //         "price"      => 10,
+    //         "picture"   =>  "pants.jpg"
+    //     ],
+    //     [
+    //         "name"      => "Jeans",
+    //         "category"  => "Tenue de jour",
+    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
+    //         "price"      => 10,
+    //         "picture"   =>  "jeans.jpg"
+    //     ],
+    //     [
+    //         "name"      => "Robe",
+    //         "category"  => "Tenue de jour",
+    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
+    //         "price"      => 12,
+    //         "picture"   =>  "dress.jpg"
+    //     ],
+    //     [
+    //         "name"      => "Chemise",
+    //         "category"  => "Tenue de jour",
+    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
+    //         "price"      => 8,
+    //         "picture"   => "sweater.jpg"
+    //     ],
+    //     [
+    //         "name"      => "Tee-shirt",
+    //         "category"  => "Tenue de jour",
+    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
+    //         "price"      => 5,
+    //         "picture"   => "tshirt.jpg"
+    //     ],
+    //     [
+    //         "name"      => "Veste",
+    //         "category"  => "Tenue de jour",
+    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
+    //         "price"      => 13,
+    //         "picture"   => "jacket.jpg"
+    //     ],
+    //     [
+    //         "name"      => "Robe de marier",
+    //         "category"  => "Tenue de soirée",
+    //         "service"   => [ 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
+    //         "price"      => 45,
+    //         "picture"   => "dress_wedding.jpg"
+    //     ],
+    //     [
+    //         "name"      => "Costume",
+    //         "category"  => "Tenue de soirée",
+    //         "service"   => ['Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
+    //         "price"      => 48,
+    //         "picture"   => "suit.jpg"
+    //     ],
+    //     [
+    //         "name"      => "Drap",
+    //         "category"  => "Linge de maison",
+    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Blanchiment', 'Repassage', 'Traitement anti-tâche'],
+    //         "price"      => 5,
+    //         "picture"   => "sheet.jpg"
+    //     ],
+    //     [
+    //         "name"      => "Couette",
+    //         "category"  => "Linge de maison",
+    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Blanchiment', 'Traitement anti-tâche'],
+    //         "price"      => 20,
+    //         "picture"   => "bed.jpg"
+    //     ],
+    //     [
+    //         "name"      => "Tapis",
+    //         "category"  => "Linge de maison",
+    //         "service"   => [ 'Traitement anti-tâche', 'Traitement tapis'],
+    //         "price"      => 30,
+    //         "picture"   => "Card_care_shut_up.jpg"
+    //     ],
+    //     [
+    //         "name"      => "Sac",
+    //         "category"  => "Maroquinerie",
+    //         "service"   => [ 'Soin du cuire', 'Nettoyage du cuire'],
+    //         "price"      => 15,
+    //         "picture"   => "bag.jpg"
+    //     ],
+    //     [
+    //         "name"      => "Ceinture",
+    //         "category"  => "Maroquinerie",
+    //         "service"   => ['Soin du cuire', 'Nettoyage du cuire'],
+    //         "price"      => 8,
+    //         "picture"   => "belt.jpg"
+    //     ],
 
 
-    ];
+    // ];
 
-    private const SECTION = 
-    [
-        'nettoyage', 'soins','autre'
-    ];
 
     public function load(ObjectManager $manager): void
     {
        
 
         $faker = Factory::create('fr_FR');
-
-        $categories = [];
-        foreach (self::CATEGORIES as $key => $value) {
-            $category = new Category();
-            $category->setName($value);
-            $manager->persist($category);
-            $categories[$value] = $category;
+        $sections = [];
+        foreach (self::SECTION as $sectionName) {
+            $section = new Section();
+            $section->setName($sectionName);
+            $sections[] = $section;
+            $manager->persist($section);
         }
-        $manager->flush();
-
-        // Création des services
+    
+        $serviceTypes = [];
+        foreach (self::SERVICES_TYPE as $serviceTypeData) {
+            $serviceType = new ServiceType();
+            $serviceType
+                ->setName($serviceTypeData['name'])
+                ->setDescription($faker->realText())
+                ->setPicture($serviceTypeData['picture']);
+    
+            foreach ($sections as $section) {
+                if ($section->getName() === $serviceTypeData['section']) {
+                    $serviceType->setSection($section);
+                    break;
+                }
+            }
+    
+            $serviceTypes[] = $serviceType;
+            $manager->persist($serviceType);
+        }
+    
         $services = [];
-        foreach (self::SERVICE as $key => $value) {
+        foreach (self::SERVICES as $serviceData) {
             $service = new Service();
             $service
-                ->setName($value['name'])
-                ->setDescription($faker->realText())
-                ->setPrice($value['price'])
-                ->setPicture($value['picture'])
-                ->setCategory($value['category']);
+                ->setName($serviceData['name'])
+                ->setPicture($serviceData['picture'])
+                ->setPrice($serviceData['price']);
+    
+            foreach ($serviceTypes as $serviceType) {
+                if ($serviceType->getName() === $serviceData['service']['name']) {
+                    $service->setServiceType($serviceType);
+                    break;
+                }
+            }
+    
+            $services[] = $service;
             $manager->persist($service);
-            $services[$value['name']] = $service;
         }
 
-                //Création des section menu
-                foreach (self::SECTION as $key => $sectionName) {
-                    $section = new Section();
-                    $section->setName($sectionName);
-         
-                     foreach ($services as $serviceName => $service) {
-                        if($service->getCategory() === $sectionName){
-                            $service->setSection($section);
-                         $section->addService($service);
-                        }
-                     }
-                     $manager->persist($section);
-                     foreach ($section->getServices() as $service) {
-                         $service->setSection($section);
-                         $manager->persist($service);
-                     }
-                 }
+   
 
-        // Création de l'admin
-        $admin = new User();
-        $admin
-            ->setFirstname('Gwendoline')
-            ->setLastname('Garlet')
-            ->setGender('Mlle')
-            ->setEmail('admin@admin.com')
-            ->setBirthdate($faker->dateTime())
-            ->setCity($faker->city())
-            ->setStreet($faker->streetAddress())
-            ->setRoles(["ROLE_ADMIN"])
-            ->setZipcode($faker->postcode())
-            ->setPassword($this->hasher->hashPassword($admin, 'admin'));
-
-        $manager->persist($admin);
-
-        // Création des utilisateurs
-        $users = [];
-        $userCustom = new User();
-        $userCustom
-        ->setFirstname($faker->firstName())
-        ->setLastname($faker->lastName())
-        ->setGender($faker->title())
-        ->setEmail('gwen@user.com')
-        ->setBirthdate($faker->dateTime())
-        ->setCity($faker->city())
-        ->setStreet($faker->streetAddress())
-        ->setRoles(["ROLE_USER", "ROLE-EMPLOYEE"])
-        ->setZipcode($faker->postcode())
-        ->setPassword($this->hasher->hashPassword($userCustom, 'user123'))
-        ->setDateCreated($faker->dateTime());
-
-        $manager->persist($userCustom);
-
-        for ($i = 0; $i < self::NB_USER - 1; $i++) {
+        // Création Users
+        for ($i=0; $i < self::NB_USER; $i++) { 
             $user = new User();
+
             $user
                 ->setFirstname($faker->firstName())
                 ->setLastname($faker->lastName())
-                ->setGender($faker->title())
-                ->setEmail($faker->email())
                 ->setBirthdate($faker->dateTime())
                 ->setCity($faker->city())
+                ->setDateCreated($faker->dateTime())
+                ->setEmail($faker->email())
+                ->setGender($faker->title())
+                ->setPassword($this->hasher->hashPassword($user, 'user123'))
+                ->setStreet($faker->postcode())
                 ->setStreet($faker->streetAddress())
                 ->setRoles(["ROLE_USER"])
-                ->setZipcode($faker->postcode())
-                ->setPassword($this->hasher->hashPassword($user, 'user123'))
-                ->setDateCreated($faker->dateTime());
-
-            $users[] = $user;
+                ->setZipcode($faker->postcode());
+            
             $manager->persist($user);
         }
 
-        // Création des commantaires
-        for ($i = 0; $i < self::NB_COMMENT; $i++) {
-            $comment = new Comment();
-            $comment
-                ->setAuthor($faker->randomElement($users))
-                ->setContent($faker->realText())
+     // Création Custom User
+
+     $employee = new User();
+
+     $employee
+         ->setFirstname($faker->firstName())
+         ->setLastname($faker->lastName())
+         ->setBirthdate($faker->dateTime())
+         ->setCity($faker->city())
+         ->setDateCreated($faker->dateTime())
+         ->setEmail('user@employee.com')
+         ->setGender($faker->title())
+         ->setPassword($this->hasher->hashPassword($employee, 'employee123'))
+         ->setStreet($faker->postcode())
+         ->setStreet($faker->streetAddress())
+         ->setRoles(["ROLE_ADMIN", "ROLE_EMPLOYEE"])
+         ->setZipcode($faker->postcode());
+     
+     $manager->persist($employee);
+
+        // Création Admin
+
+        $admin = new User();
+
+            $admin
+                ->setFirstname('Gwen')
+                ->setLastname($faker->lastName())
+                ->setBirthdate($faker->dateTime())
+                ->setCity($faker->city())
                 ->setDateCreated($faker->dateTime())
-                ->setScore(rand(1,5));
-            $manager->persist($comment);
-        }
-
-        // Création des panier
-        $statuBasket = ['waiting', 'confirmed'];
-        $baskets = [];
-        for ($i = 0; $i < self::NB_BASKET; $i++) {
-            $basket = new Basket();
-            $basket->setStatus($faker->randomElement($statuBasket));
-
-            $baskets[] = $basket;
-            $manager->persist($basket);
-        }
-
-        // Création des commandes
-        $statuOrder = ['waiting', 'start', 'finish'];
-        $orders = [];
-        foreach ($baskets as $key => $basket) {
-            if ($basket->getStatus() === 'confirmed') {
-                $order = new Order();
-                $order
-                    ->setDepotDate($faker->dateTimeInInterval())
-                    ->setPayementDate($faker->dateTimeInInterval())
-                    ->setPickUpDate($faker->dateTimeBetween())
-                    ->setStatus($faker->randomElement($statuOrder))
-                    ->setUser($faker->randomElement($users));
-                
-                $manager->persist($order);
-            }
-        }
-
-        // Création des articles
-        $articles = [];
-        foreach (self::ARTICLES as $key => $article) {
-            $newArticle = new Article();
-            $newArticle
-                ->setName($article['name'])
-                ->setDescription($faker->realText())
-                ->setPrice($article['price'])
-                ->setPicture($article['picture']);
-            // ->setCategory()
-
-            $articleServices = [];
-            foreach ($article['service'] as $serviceName) {
-                if (isset($services[$serviceName])) {
-                    $articleServices[] = $services[$serviceName];
-                }
-            }
-
-
-            if (isset($categories[$article['category']])) {
-                $cat = $categories[$article['category']];
-                $newArticle->setCategory($cat);
-            }
-            $manager->persist($newArticle);
-            $manager->flush();
-
-            foreach ($articleServices as $service) {
-                $service->addArticle($newArticle);
-                $manager->persist($service);
-            }
-
-            // Création des Prestation
-            foreach ($articleServices as $service) {
-                $prestation = new Prestation();
-                $prestation
-                    ->setArticle($newArticle)
-                    ->setService($service);
-                $manager->persist($prestation);
-            }
-        }
-
+                ->setEmail('admin@admin.com')
+                ->setGender($faker->title())
+                ->setPassword($this->hasher->hashPassword($admin, 'admin123'))
+                ->setStreet($faker->postcode())
+                ->setStreet($faker->streetAddress())
+                ->setRoles(["ROLE_ADMIN"])
+                ->setZipcode($faker->postcode());
+            
+            $manager->persist($admin);
 
         $manager->flush();
     }

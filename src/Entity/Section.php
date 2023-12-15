@@ -27,7 +27,8 @@ use ApiPlatform\Metadata\Put;
         ),
         new Delete(),
         new GetCollection( 
-            normalizationContext: ['groups' => ['section:read']]  
+            normalizationContext: ['groups' => ['section:read']],
+            denormalizationContext: ['groups' => ['section:post']] 
         ),
         new Post(
             denormalizationContext: ['groups' => ['section:post']] 
@@ -38,22 +39,24 @@ use ApiPlatform\Metadata\Put;
 #[ORM\Entity(repositoryClass: SectionRepository::class)]
 class Section
 {
+    #[Groups(['section:read', 'serviceType:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['section:read','section:patch'])]
+    #[Groups(['section:read','section:patch','section:post', 'serviceType:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['section:read','section:patch'])]
-    #[ORM\OneToMany(mappedBy: 'section', targetEntity: Service::class)]
-    private Collection $services;
+    #[Groups(['section:read', 'section:post'])]
+    #[ORM\OneToMany(mappedBy: 'section', targetEntity: ServiceType::class)]
+    private Collection $serviceTypes;
+
 
     public function __construct()
     {
-        $this->services = new ArrayCollection();
+        $this->serviceTypes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,29 +77,29 @@ class Section
     }
 
     /**
-     * @return Collection<int, Service>
+     * @return Collection<int, ServiceType>
      */
-    public function getServices(): Collection
+    public function getServiceTypes(): Collection
     {
-        return $this->services;
+        return $this->serviceTypes;
     }
 
-    public function addService(Service $service): static
+    public function addServiceType(ServiceType $serviceType): static
     {
-        if (!$this->services->contains($service)) {
-            $this->services->add($service);
-            $service->setSection($this);
+        if (!$this->serviceTypes->contains($serviceType)) {
+            $this->serviceTypes->add($serviceType);
+            $serviceType->setSection($this);
         }
 
         return $this;
     }
 
-    public function removeService(Service $service): static
+    public function removeServiceType(ServiceType $serviceType): static
     {
-        if ($this->services->removeElement($service)) {
+        if ($this->serviceTypes->removeElement($serviceType)) {
             // set the owning side to null (unless already changed)
-            if ($service->getSection() === $this) {
-                $service->setSection(null);
+            if ($serviceType->getSection() === $this) {
+                $serviceType->setSection(null);
             }
         }
 
