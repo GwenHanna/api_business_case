@@ -20,7 +20,8 @@ use ApiPlatform\Metadata\Put;
 #[ApiResource(
     operations: [
         new Get(
-            normalizationContext: ['groups' => ['section:read']]
+            normalizationContext: ['groups' => ['section:read']],
+            security: 'is_granted("ROLE_ADMIN")'
         ),
         new Patch(
             denormalizationContext: ['groups' => ['section:patch']]
@@ -45,7 +46,7 @@ class Section
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['section:read','section:patch','section:post', 'serviceType:read'])]
+    #[Groups(['section:read','section:patch','section:post', 'serviceType:read', 'section:post'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 

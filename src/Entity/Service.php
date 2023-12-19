@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
+use App\Controller\PricingController;
 use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,8 +19,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     paginationEnabled:false,
-
+    
     operations: [
+
+        
         new Get(
             normalizationContext:['groups' => ['service:read']],
             
@@ -35,6 +40,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             normalizationContext:['groups' => ['service:read']],
             denormalizationContext: ['groups' => ['service:post']],
         ),
+
     ]
 
 )]
@@ -42,7 +48,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 class Service
 {
 
-    #[Groups('service:read')]
+    #[Groups(['service:read', 'serviceType:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -56,7 +62,7 @@ class Service
     #[ORM\Column]
     private ?float $price = null;
 
-    #[Groups(['service:read', 'service:post', 'service:post'])]
+    #[Groups(['service:read', 'service:post'])]
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
@@ -67,6 +73,10 @@ class Service
     #[Groups(['service:read','service:post'])]
     #[ORM\ManyToOne(inversedBy: 'service')]
     private ?ServiceType $serviceType = null;
+
+    #[Groups(["service:read", "service:post"])] 
+    private $quantity = 0;
+  
 
     public function __construct()
     {
@@ -155,4 +165,7 @@ class Service
 
         return $this;
     }
+
+    public function getQuantity(){ return $this->quantity; }
+    public function setQuantity($quantity): self { $this->quantity = $quantity; return $this; }
 }

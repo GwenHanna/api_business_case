@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
@@ -15,15 +16,19 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
+
 #[ApiResource(
-    normalizationContext: ['groups' => ['serviceType:read']],
-    denormalizationContext:['groups' => ['serviceType:post']],
     operations: [
         new Get(
+                normalizationContext: ['groups' => ['serviceType:read']],
+
         ),
         new Patch(),
         new Delete(),
-        new GetCollection(),
+        new GetCollection(
+                normalizationContext: ['groups' => ['serviceType:read']],
+
+        ),
         new Post(
         ),
 
@@ -33,13 +38,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: ServiceTypeRepository::class)]
 class ServiceType
 {
-    #[Groups(['serviceType:read', 'section:read', 'serviceType:post'])]
+    #[Groups(['serviceType:read', 'section:read', 'serviceType:post', 'service:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['serviceType:read','section:read',  'section:read', 'articles:post', 'serviceType:post','section:patch'])]
+    #[Groups(['serviceType:read','section:read', 'articles:post', 'serviceType:post','section:patch','service:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -55,6 +60,7 @@ class ServiceType
     #[ORM\ManyToOne(inversedBy: 'serviceTypes')]
     private ?Section $section = null;
 
+    #[Groups(['serviceType:read', 'serviceType:post', 'service:read'])]
     #[ORM\OneToMany(mappedBy: 'serviceType', targetEntity: Service::class)]
     private Collection $service;
 

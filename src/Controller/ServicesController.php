@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ServicesController extends AbstractController
 {
+
     #[Route('api/services/{id}/article', name: 'app_services', methods: 'GET')]
     public function getServicesUri( ServiceType $serviceType): JsonResponse
     {
