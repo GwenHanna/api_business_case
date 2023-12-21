@@ -11,7 +11,9 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use App\Controller\PricingController;
+use App\Dto\PricingDto;
 use App\Repository\ServiceRepository;
+use App\State\PricingProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,7 +27,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
         
         new Get(
             normalizationContext:['groups' => ['service:read']],
-            
+            uriTemplate: '/services/{id}/pricing',
+            output: PricingDto::class,
+            provider: PricingProvider::class,
         ),
         new Patch(
             normalizationContext:['groups' => ['service:patch:read']],
