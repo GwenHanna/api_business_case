@@ -44,6 +44,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
     
 )]
 #[ApiFilter(SearchFilter::class, properties: ['roles'])]
+#[ApiFilter(SearchFilter::class, properties: ['email'])]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity("email", message:"This email is already in use.")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface

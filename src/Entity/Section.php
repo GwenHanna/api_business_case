@@ -20,8 +20,7 @@ use ApiPlatform\Metadata\Put;
 #[ApiResource(
     operations: [
         new Get(
-            normalizationContext: ['groups' => ['section:read']],
-            security: 'is_granted("ROLE_ADMIN")'
+            normalizationContext: ['groups' => ['section:read']]
         ),
         new Patch(
             denormalizationContext: ['groups' => ['section:patch']]

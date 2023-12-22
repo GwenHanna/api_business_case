@@ -10,7 +10,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
-use App\Controller\PricingController;
 use App\Dto\PricingDto;
 use App\Repository\ServiceRepository;
 use App\State\PricingProvider;
@@ -77,10 +76,6 @@ class Service
     #[Groups(['service:read','service:post'])]
     #[ORM\ManyToOne(inversedBy: 'service')]
     private ?ServiceType $serviceType = null;
-
-    #[Groups(["service:read", "service:post"])] 
-    private $quantity = 0;
-  
 
     public function __construct()
     {
@@ -169,7 +164,4 @@ class Service
 
         return $this;
     }
-
-    public function getQuantity(){ return $this->quantity; }
-    public function setQuantity($quantity): self { $this->quantity = $quantity; return $this; }
 }
