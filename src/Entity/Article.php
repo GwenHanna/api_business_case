@@ -46,6 +46,12 @@ class Article
     #[ORM\OneToMany(mappedBy: 'article', targetEntity: Selection::class, fetch:'EAGER')]
     private Collection $selections;
 
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    private ?Order $orderId = null;
+
+    #[ORM\Column(length: 600, nullable: true)]
+    private ?string $note = null;
+
     public function __construct()
     {
         $this->selections = new ArrayCollection();
@@ -94,6 +100,30 @@ class Article
                 $selection->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOrderId(): ?Order
+    {
+        return $this->orderId;
+    }
+
+    public function setOrderId(?Order $orderId): static
+    {
+        $this->orderId = $orderId;
+
+        return $this;
+    }
+
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    public function setNote(?string $note): static
+    {
+        $this->note = $note;
 
         return $this;
     }

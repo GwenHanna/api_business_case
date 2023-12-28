@@ -45,6 +45,9 @@ class Selection
     #[ORM\Column(length: 255)]
     private ?string $note = null;
 
+    #[ORM\ManyToOne(inversedBy: 'selections')]
+    private ?Order $orderId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -82,6 +85,18 @@ class Selection
     public function setNote(string $note): static
     {
         $this->note = $note;
+
+        return $this;
+    }
+
+    public function getOrderId(): ?Order
+    {
+        return $this->orderId;
+    }
+
+    public function setOrderId(?Order $orderId): static
+    {
+        $this->orderId = $orderId;
 
         return $this;
     }

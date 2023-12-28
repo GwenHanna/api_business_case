@@ -164,4 +164,9 @@ class Service
 
         return $this;
     }
+    #[Groups('service:read')]
+    public function getServiceTypeName(): ?string
+    {
+        return $this->serviceType ? $this->serviceType->getName() : null;
+    }
 }
