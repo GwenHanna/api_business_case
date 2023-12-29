@@ -40,13 +40,13 @@ class AppFixtures extends Fixture
             'section' => self::SECTION[0]
         ],
         [
-            'name' => 'Nettoyage linge délicat',
+            'name' => 'Nettoyage linge délicat', 
             'picture' => 'Card_clean_delicate.jpg',
             'section' => self::SECTION[0]
         ],
         [
             'name' => 'Nettoyage du cuire',
-            'picture' => 'care_leather.jpg',
+            'picture' => 'clean_leather.jpg',
             'section' => self::SECTION[0]
         ],
         [
@@ -57,465 +57,405 @@ class AppFixtures extends Fixture
         [
             'name' => 'Repassage',
             'picture' => 'ironing.jpg',
-            'section' => self::SECTION[1]
+            'section' => self::SECTION[2]
         ],
         [
             'name' => 'Blanchiment',
-            'picture' => 'ironing.jpg',
-            'section' => self::SECTION[2]
+            'picture' => 'Card_care_whitening.jpg',
+            'section' => self::SECTION[1]
         ],
         [
             'name' => 'Traitement anti-tâche',
             'picture' => 'Card_anti_stain.jpg',
-            'section' => self::SECTION[2]
+            'section' => self::SECTION[1]
 
         ],
         [
             'name' => 'Traitement tapis',
             'picture' => 'Card_care_shut_up.jpg',
-            'section' => self::SECTION[2]
+            'section' => self::SECTION[1]
 
         ],
         [
             'name' => 'Soin du cuire',
-            'picture' => 'clean_leather.jpg',
-            'section' => self::SECTION[2]
+            'picture' => 'care_leather.jpg',
+            'section' => self::SECTION[1]
 
         ],
     ];
 
     private const GARMENT = 
     [
-        'Jeans','Pantalon en Lin','Pantalon Acrylique ','Robe Acrylique', 'Robe en Soie','Chemise', 'Tee-shirt', 'Veste','Robe de marier','Costume','Couette', 'Drap','Ceinture', 'Sac','Tapis'
+        'Jeans','Pantalon en Lin','Pantalon Acrylique','Robe Acrylique', 'Robe en Soie','Chemise', 'Tee-shirt', 'Veste','Robe de marier','Costume','Couette', 'Drap','Ceinture', 'Sac','Tapis'
     ];
-
+// Nettoyage à sec Nettoyage linge délicat Réparation de vêtement Repassage
     private const SERVICES =
     [
         [
-            'name'  => self::GARMENT[0],
-            'service' => self::SERVICES_TYPE[0],
-            'price' => 4,
-            'picture'   =>  'dry_cleaning.jpg',
-            'section' => 'nettoyage'
-        ],
-        [
-            'name'  => self::GARMENT[0],
-            'service' => self::SERVICES_TYPE[3],
+            'name'  => 'Jeans',
+            'service' => 'Nettoyage à sec',
             'price' => 8,
-            'picture'   => 'Card_clean_delicate.jpg',
+            'picture'   =>  'jeans.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Jeans',
+            'service' => 'Nettoyage linge délicat',
+            'price' => 8,
+            'picture'   =>  'jeans.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Jeans',
+            'service' => 'Repassage',
+            'price' => 5,
+            'picture'   => 'jeans.jpg',
             'section' => 'autre'
         ],
         [
-            'name'  => self::GARMENT[0],
-            'service' => self::SERVICES_TYPE[4],
-            'price' => 0,
-            'picture'   => 'reparation.jpg',
+            'name'  => 'Jeans',
+            'service' => 'Réparation de vêtement',
+            'price' => 10,
+            'picture'   => 'jeans.jpg',
             'section' => 'autre'
         ],
         [
-            'name'  => self::GARMENT[1],
-            'service' => self::SERVICES_TYPE[0],
-            'price' => 1,
+            'name'  => 'Pantalon en Lin',
+            'service' => 'Nettoyage à sec',
+            'price' => 9,
             'picture'   => 'clean_leather.jpg',
             'section' => 'nettoyage'
 
         ],
         [
-            'name'  => self::GARMENT[1],
-            'service' => self::SERVICES_TYPE[1],
-            'price' => 1,
+            'name'  => 'Pantalon en Lin',
+            'service' => 'Nettoyage linge délicat',
+            'price' => 11,
             'picture'   => 'clean_leather.jpg',
             'section' => 'nettoyage'
 
         ],
         [
-            'name'  => self::GARMENT[1],
-            'service' => self::SERVICES_TYPE[3],
-            'price' => 1,
+            'name'  => 'Pantalon en Lin',
+            'service' => 'Réparation de vêtement',
+            'price' => 10,
             'picture'   => 'clean_leather.jpg',
             'section' => 'autre'
 
         ],
         [
-            'name'  => self::GARMENT[1],
-            'service' => self::SERVICES_TYPE[4],
-            'price' => 1,
+            'name'  => 'Pantalon en Lin',
+            'service' => 'Repassage',
+            'price' => 5,
             'picture'   => 'clean_leather.jpg',
             'section' => 'autre'
 
         ],
         [
-            'name'  => self::GARMENT[2],
-            'service' => self::SERVICES_TYPE[0],
-            'price' => 3,
-            'picture'   => 'ironing.jpg',
+            'name'  => 'Pantalon Acrylique',
+            'service' => 'Nettoyage à sec',
+            'price' => 8,
+            'picture'   => 'pants.jpg',
             'section' => 'nettoyage'
         ],
         [
-            'name'  => self::GARMENT[2],
-            'service' => self::SERVICES_TYPE[3],
-            'price' => 3,
-            'picture'   => 'ironing.jpg',
+            'name'  => 'Pantalon Acrylique',
+            'service' => 'Réparation de vêtement',
+            'price' => 10,
+            'picture'   => 'pants.jpg',
             'section' => 'autre'
         ],
         [
-            'name'  => self::GARMENT[3],
-            'service' => self::SERVICES_TYPE[0],
+            'name'  => 'Pantalon Acrylique',
+            'service' => 'Nettoyage linge délicat',
+            'price' => 10,
+            'picture'   => 'pants.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Pantalon Acrylique',
+            'service' => 'Repassage',
             'price' => 5,
-            'picture'   => 'Card_care_whitening.jpg',
+            'picture'   => 'pants.jpg',
+            'section' => 'autre'
+        ],
+        [
+            'name'  => 'Robe Acrylique',
+            'service' => 'Nettoyage à sec',
+            'price' => 8,
+            'picture'   =>  'dress.jpg',
             'section' => 'nettoyage'
         ],
         [
-            'name'  => self::GARMENT[3],
-            'service' => self::SERVICES_TYPE[3],
+            'name'  => 'Robe Acrylique',
+            'service' => 'Nettoyage linge délicat',
+            'price' => 8,
+            'picture'   =>  'dress.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Robe Acrylique',
+            'service' => 'Repassage',
             'price' => 5,
-            'picture'   => 'Card_care_whitening.jpg',
+            'picture'   => 'dress.jpg',
             'section' => 'autre'
         ],
         [
-            'name'  => self::GARMENT[3],
-            'service' => self::SERVICES_TYPE[4],
+            'name'  => 'Robe Acrylique',
+            'service' => 'Réparation de vêtement',
+            'price' => 10,
+            'picture'   => 'dress.jpg',
+            'section' => 'autre'
+        ],
+        [
+            'name'  => 'Robe en Soie',
+            'service' => 'Nettoyage linge délicat',
+            'price' => 8,
+            'picture'   =>  'dress.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Robe en Soie',
+            'service' => 'Repassage',
             'price' => 5,
-            'picture'   => 'Card_care_whitening.jpg',
+            'picture'   => 'dress.jpg',
             'section' => 'autre'
         ],
         [
-            'name'  => self::GARMENT[4],
-            'service' => self::SERVICES_TYPE[1],
+            'name'  => 'Robe en Soie',
+            'service' => 'Réparation de vêtement',
+            'price' => 10,
+            'picture'   => 'dress.jpg',
+            'section' => 'autre'
+        ],
+        [
+            'name'  => 'Chemise',
+            'service' => 'Nettoyage à sec',
+            'price' => 8,
+            'picture'   =>  'shirt.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Chemise',
+            'service' => 'Nettoyage linge délicat',
+            'price' => 8,
+            'picture'   =>  'shirt.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Chemise',
+            'service' => 'Repassage',
             'price' => 5,
-            'picture'   => 'Card_anti_stain.jpg',
+            'picture'   => 'shirt.jpg',
+            'section' => 'autre'
+        ],
+        [
+            'name'  => 'Chemise',
+            'service' => 'Réparation de vêtement',
+            'price' => 10,
+            'picture'   => 'shirt.jpg',
+            'section' => 'autre'
+        ],
+        [
+            'name'  => 'Tee-shirt',
+            'service' => 'Nettoyage à sec',
+            'price' => 8,
+            'picture'   =>  'tshirt.jpg',
             'section' => 'nettoyage'
         ],
         [
-            'name'  => self::GARMENT[4],
-            'service' => self::SERVICES_TYPE[4],
+            'name'  => 'Tee-shirt',
+            'service' => 'Nettoyage linge délicat',
+            'price' => 8,
+            'picture'   =>  'tshirt.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Tee-shirt',
+            'service' => 'Repassage',
             'price' => 5,
-            'picture'   => 'Card_anti_stain.jpg',
+            'picture'   => 'tshirt.jpg',
             'section' => 'autre'
         ],
         [
-            'name'  => self::GARMENT[4],
-            'service' => self::SERVICES_TYPE[4],
+            'name'  => 'Tee-shirt',
+            'service' => 'Réparation de vêtement',
+            'price' => 10,
+            'picture'   => 'tshirt.jpg',
+            'section' => 'autre'
+        ],
+        [
+            'name'  => 'Veste',
+            'service' => 'Nettoyage à sec',
+            'price' => 8,
+            'picture'   =>  'jacket.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Veste',
+            'service' => 'Nettoyage linge délicat',
+            'price' => 8,
+            'picture'   =>  'jacket.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Veste',
+            'service' => 'Repassage',
             'price' => 5,
-            'picture'   => 'Card_anti_stain.jpg',
+            'picture'   => 'jacket.jpg',
             'section' => 'autre'
         ],
         [
-            'name'  => self::GARMENT[5],
-            'service' => self::SERVICES_TYPE[0],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'nettoyage'
-
-        ],
-        [
-            'name'  => self::GARMENT[5],
-            'service' => self::SERVICES_TYPE[1],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'nettoyage'
-
-        ],
-        [
-            'name'  => self::GARMENT[5],
-            'service' => self::SERVICES_TYPE[3],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
+            'name'  => 'Veste',
+            'service' => 'Réparation de vêtement',
+            'price' => 10,
+            'picture'   => 'jacket.jpg',
             'section' => 'autre'
-
+        ],
+       
+        [
+            'name'  => 'Robe de marier',
+            'service' => 'Nettoyage à sec',
+            'price' => 60,
+            'picture'   =>  'dress_wedding.jpg',
+            'section' => 'nettoyage'
         ],
         [
-            'name'  => self::GARMENT[5],
-            'service' => self::SERVICES_TYPE[4],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
+            'name'  => 'Robe de marier',
+            'service' => 'Nettoyage linge délicat',
+            'price' => 78,
+            'picture'   =>  'dress_wedding.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Robe de marier',
+            'service' => 'Repassage',
+            'price' => 45,
+            'picture'   => 'dress_wedding.jpg',
             'section' => 'autre'
-
         ],
         [
-            'name'  => self::GARMENT[5],
-            'service' => self::SERVICES_TYPE[0],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'nettoyage'
-
-        ],
-        [
-            'name'  => self::GARMENT[6],
-            'service' => self::SERVICES_TYPE[1],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'nettoyage'
-
-        ],
-        [
-            'name'  => self::GARMENT[6],
-            'service' => self::SERVICES_TYPE[3],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
+            'name'  => 'Robe de marier',
+            'service' => 'Réparation de vêtement',
+            'price' => 90,
+            'picture'   => 'dress_wedding.jpg',
             'section' => 'autre'
-
         ],
         [
-            'name'  => self::GARMENT[6],
-            'service' => self::SERVICES_TYPE[4],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
+            'name'  => 'Costume',
+            'service' => 'Nettoyage à sec',
+            'price' => 8,
+            'picture'   =>  'suit.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Costume',
+            'service' => 'Nettoyage linge délicat',
+            'price' => 8,
+            'picture'   =>  'suit.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Costume',
+            'service' => 'Repassage',
+            'price' => 5,
+            'picture'   => 'suit.jpg',
             'section' => 'autre'
-
         ],
         [
-            'name'  => self::GARMENT[7],
-            'service' => self::SERVICES_TYPE[0],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'nettoyage'
-
-        ],
-        [
-            'name'  => self::GARMENT[7],
-            'service' => self::SERVICES_TYPE[1],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'nettoyage'
-
-        ],
-        [
-            'name'  => self::GARMENT[7],
-            'service' => self::SERVICES_TYPE[3],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
+            'name'  => 'Costume',
+            'service' => 'Réparation de vêtement',
+            'price' => 10,
+            'picture'   => 'suit.jpg',
             'section' => 'autre'
-
         ],
         [
-            'name'  => self::GARMENT[7],
-            'service' => self::SERVICES_TYPE[4],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'autre'
-
-        ],
-        [
-            'name'  => self::GARMENT[9],
-            'service' => self::SERVICES_TYPE[0],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
+            'name'  => 'Couette',
+            'service' => 'Nettoyage à sec',
+            'price' => 35,
+            'picture'   =>  'bed.jpg',
             'section' => 'nettoyage'
-
         ],
         [
-            'name'  => self::GARMENT[9],
-            'service' => self::SERVICES_TYPE[1],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
+            'name'  => 'Couette',
+            'service' => 'Nettoyage linge délicat',
+            'price' => 45,
+            'picture'   =>  'bed.jpg',
             'section' => 'nettoyage'
-
         ],
         [
-            'name'  => self::GARMENT[9],
-            'service' => self::SERVICES_TYPE[3],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'autre'
-
-        ],
-        [
-            'name'  => self::GARMENT[9],
-            'service' => self::SERVICES_TYPE[4],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'autre'
-
-        ],
-
-        [
-            'name'  => self::GARMENT[10],
-            'service' => self::SERVICES_TYPE[0],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'nettoyage'
-
-        ],
-        [
-            'name'  => self::GARMENT[10],
-            'service' => self::SERVICES_TYPE[1],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'nettoyage'
-
-        ],
-        [
-            'name'  => self::GARMENT[10],
-            'service' => self::SERVICES_TYPE[5],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => self::SERVICES_TYPE[5]
-
-        ],
-        [
-            'name'  => self::GARMENT[11],
-            'service' => self::SERVICES_TYPE[0],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'nettoyage'
-
-        ],
-        [
-            'name'  => self::GARMENT[11],
-            'service' => self::SERVICES_TYPE[1],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'nettoyage'
-
-        ],
-        [
-            'name'  => self::GARMENT[11],
-            'service' => self::SERVICES_TYPE[5],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => self::SERVICES_TYPE[5]
-
-        ],
-
-        [
-            'name'  => self::GARMENT[12],
-            'service' => self::SERVICES_TYPE[2],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'nettoyage'
-
-        ],
-        [
-            'name'  => self::GARMENT[12],
-            'service' => self::SERVICES_TYPE[8],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
+            'name'  => 'Couette',
+            'service' => 'Blanchiment',
+            'price' => 70,
+            'picture'   => 'bed.jpg',
             'section' => 'soins'
-
         ],
         [
-            'name'  => self::GARMENT[13],
-            'service' => self::SERVICES_TYPE[2],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
+            'name'  => 'Drap',
+            'service' => 'Nettoyage à sec',
+            'price' => 35,
+            'picture'   =>  'sheet.jpg',
             'section' => 'nettoyage'
-
         ],
         [
-            'name'  => self::GARMENT[13],
-            'service' => self::SERVICES_TYPE[8],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
+            'name'  => 'Drap',
+            'service' => 'Nettoyage linge délicat',
+            'price' => 45,
+            'picture'   =>  'sheet.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Drap',
+            'service' => 'Blanchiment',
+            'price' => 70,
+            'picture'   => 'sheet.jpg',
             'section' => 'soins'
-
         ],
         [
-            'name'  => self::GARMENT[14],
-            'service' => self::SERVICES_TYPE[7],
-            'price' => 1,
-            'picture'   => 'Card_care_shut_up.jpg',
-            'section' => 'autre'
-
+            'name'  => 'Ceinture',
+            'service' => 'Nettoyage du cuire',
+            'price' => 35,
+            'picture'   =>  'belt.jpg',
+            'section' => 'nettoyage'
         ],
+        [
+            'name'  => 'Ceinture',
+            'service' => 'Soin du cuire',
+            'price' => 45,
+            'picture'   =>  'belt.jpg',
+            'section' => 'soins'
+        ],
+        [
+            'name'  => 'Sac',
+            'service' => 'Nettoyage du cuire',
+            'price' => 35,
+            'picture'   =>  'bag.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Sac',
+            'service' => 'Soin du cuire',
+            'price' => 70,
+            'picture'   => 'bag.jpg',
+            'section' => 'soins'
+        ],
+        [
+            'name'  => 'Tapis',
+            'service' => 'Traitement tapis',
+            'price' => 8,
+            'picture'   =>  'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+        ],
+        [
+            'name'  => 'Tapis',
+            'service' => 'Traitement anti-tâche',
+            'price' => 8,
+            'picture'   =>  'Card_care_shut_up.jpg',
+            'section' => 'nettoyage'
+        ],
+        
       
     ];
-
-    // private const SERVICES =
-    // [
-    //     [
-    //         "name"      => "Pantalon",
-    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-    //         "price"      => 10,
-    //         "picture"   =>  "pants.jpg"
-    //     ],
-    //     [
-    //         "name"      => "Jeans",
-    //         "category"  => "Tenue de jour",
-    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-    //         "price"      => 10,
-    //         "picture"   =>  "jeans.jpg"
-    //     ],
-    //     [
-    //         "name"      => "Robe",
-    //         "category"  => "Tenue de jour",
-    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-    //         "price"      => 12,
-    //         "picture"   =>  "dress.jpg"
-    //     ],
-    //     [
-    //         "name"      => "Chemise",
-    //         "category"  => "Tenue de jour",
-    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-    //         "price"      => 8,
-    //         "picture"   => "sweater.jpg"
-    //     ],
-    //     [
-    //         "name"      => "Tee-shirt",
-    //         "category"  => "Tenue de jour",
-    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-    //         "price"      => 5,
-    //         "picture"   => "tshirt.jpg"
-    //     ],
-    //     [
-    //         "name"      => "Veste",
-    //         "category"  => "Tenue de jour",
-    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-    //         "price"      => 13,
-    //         "picture"   => "jacket.jpg"
-    //     ],
-    //     [
-    //         "name"      => "Robe de marier",
-    //         "category"  => "Tenue de soirée",
-    //         "service"   => [ 'Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-    //         "price"      => 45,
-    //         "picture"   => "dress_wedding.jpg"
-    //     ],
-    //     [
-    //         "name"      => "Costume",
-    //         "category"  => "Tenue de soirée",
-    //         "service"   => ['Nettoyage linge délicat', 'Réparation de vêtement', 'Repassage'],
-    //         "price"      => 48,
-    //         "picture"   => "suit.jpg"
-    //     ],
-    //     [
-    //         "name"      => "Drap",
-    //         "category"  => "Linge de maison",
-    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Blanchiment', 'Repassage', 'Traitement anti-tâche'],
-    //         "price"      => 5,
-    //         "picture"   => "sheet.jpg"
-    //     ],
-    //     [
-    //         "name"      => "Couette",
-    //         "category"  => "Linge de maison",
-    //         "service"   => ['Nettoyage à sec', 'Nettoyage linge délicat', 'Blanchiment', 'Traitement anti-tâche'],
-    //         "price"      => 20,
-    //         "picture"   => "bed.jpg"
-    //     ],
-    //     [
-    //         "name"      => "Tapis",
-    //         "category"  => "Linge de maison",
-    //         "service"   => [ 'Traitement anti-tâche', 'Traitement tapis'],
-    //         "price"      => 30,
-    //         "picture"   => "Card_care_shut_up.jpg"
-    //     ],
-    //     [
-    //         "name"      => "Sac",
-    //         "category"  => "Maroquinerie",
-    //         "service"   => [ 'Soin du cuire', 'Nettoyage du cuire'],
-    //         "price"      => 15,
-    //         "picture"   => "bag.jpg"
-    //     ],
-    //     [
-    //         "name"      => "Ceinture",
-    //         "category"  => "Maroquinerie",
-    //         "service"   => ['Soin du cuire', 'Nettoyage du cuire'],
-    //         "price"      => 8,
-    //         "picture"   => "belt.jpg"
-    //     ],
-
-
-    // ];
 
 
     public function load(ObjectManager $manager): void
@@ -559,7 +499,7 @@ class AppFixtures extends Fixture
                 ->setPrice($serviceData['price']);
     
             foreach ($serviceTypes as $serviceType) {
-                if ($serviceType->getName() === $serviceData['service']['name']) {
+                if ($serviceType->getName() === $serviceData['service']) {
                     $service->setServiceType($serviceType);
                     break;
                 }
@@ -572,7 +512,7 @@ class AppFixtures extends Fixture
    
 
         // Création Users
-        for ($i=0; $i < self::NB_USER; $i++) { 
+        for($i=0; $i < self::NB_USER; $i++) { 
             $user = new User();
 
             $user
