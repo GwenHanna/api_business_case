@@ -13,19 +13,17 @@ use Symfony\Component\HttpClient\HttpClient;
 class PricingController extends AbstractController
 {
 
-    #[Route('api/services/{id}/pricing', name: 'selection_pricing', methods: 'GET', stateless: false)]
-    public function index(Service $service, SessionInterface $session): Response
-    {
-        $user = $this->getUser();
+    // #[Route('api/services/{id}/pricing', name: 'selection_pricing', methods: 'GET', stateless: false)]
+    // public function index(Service $service, SessionInterface $session): Response
+    // {
+    //     $user = $this->getUser();
 
-        dd($user);
-        $quantity = $service->getQuantity() + 1;
-        $service->setQuantity($quantity);
-        // Calculer le prix total
-        $price = $service->getPrice();
-        $sum = $price * $quantity;
+ 
+    //     // Calculer le prix total
+    //     $price = $service->getPrice();
+    //     $sum = $price * $quantity;
       
         
-        return $this->json(['price' => $price, 'quantity' => $quantity ,'priceTotal' => $sum]);
-    }
+    //     return $this->json(['price' => $price, 'quantity' => $quantity ,'priceTotal' => $sum]);
+    // }
 }
