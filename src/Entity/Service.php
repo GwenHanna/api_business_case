@@ -169,4 +169,9 @@ class Service
     {
         return $this->serviceType ? $this->serviceType->getName() : null;
     }
+    #[Groups('service:read')]
+    public function getServiceTypeId(): ?string
+    {
+        return $this->serviceType ? $this->serviceType->getId() : null;
+    }
 }

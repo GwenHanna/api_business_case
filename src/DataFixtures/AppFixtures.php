@@ -37,49 +37,58 @@ class AppFixtures extends Fixture
         [
             'name' => 'Nettoyage à sec',
             'picture' => 'dry_cleaning.jpg',
-            'section' => self::SECTION[0]
+            'section' => self::SECTION[0],
+            'icon' => 'dry_cleaning.svg'
         ],
         [
             'name' => 'Nettoyage linge délicat', 
             'picture' => 'Card_clean_delicate.jpg',
-            'section' => self::SECTION[0]
+            'section' => self::SECTION[0],
+            'icon' => 'dry_cleaning.svg'
         ],
         [
             'name' => 'Nettoyage du cuire',
             'picture' => 'clean_leather.jpg',
-            'section' => self::SECTION[0]
+            'section' => self::SECTION[0],
+            'icon' => 'leather.svg'
         ],
         [
             'name' => 'Réparation de vêtement',
             'picture' => 'reparation.jpg',
-            'section' => self::SECTION[2]
+            'section' => self::SECTION[2],
+            'icon' => 'reparation.svg'
         ],
         [
             'name' => 'Repassage',
             'picture' => 'ironing.jpg',
-            'section' => self::SECTION[2]
+            'section' => self::SECTION[2],
+            'icon' => 'ironing.svg'
         ],
         [
             'name' => 'Blanchiment',
             'picture' => 'Card_care_whitening.jpg',
-            'section' => self::SECTION[1]
+            'section' => self::SECTION[1],
+            'icon' => 'care_whitening.svg'
         ],
         [
             'name' => 'Traitement anti-tâche',
             'picture' => 'Card_anti_stain.jpg',
-            'section' => self::SECTION[1]
+            'section' => self::SECTION[1],
+            'icon' => 'anti_stain.svg'
 
         ],
         [
             'name' => 'Traitement tapis',
             'picture' => 'Card_care_shut_up.jpg',
-            'section' => self::SECTION[1]
+            'section' => self::SECTION[1],
+            'icon' => 'care_shut_up.svg'
 
         ],
         [
             'name' => 'Soin du cuire',
             'picture' => 'care_leather.jpg',
-            'section' => self::SECTION[1]
+            'section' => self::SECTION[1],
+            'icon' => 'leather.svg'
 
         ],
     ];
@@ -477,7 +486,8 @@ class AppFixtures extends Fixture
             $serviceType
                 ->setName($serviceTypeData['name'])
                 ->setDescription($faker->realText())
-                ->setPicture($serviceTypeData['picture']);
+                ->setPicture($serviceTypeData['picture'])
+                ->setIcon($serviceTypeData['icon']);
     
             foreach ($sections as $section) {
                 if ($section->getName() === $serviceTypeData['section']) {
