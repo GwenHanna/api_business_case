@@ -38,7 +38,7 @@ class AppFixtures extends Fixture
             'name' => 'Nettoyage à sec',
             'picture' => 'dry_cleaning.jpg',
             'section' => self::SECTION[0],
-            'icon' => 'dry_cleaning.svg'
+            'icon' => 'clean_delicate.svg'
         ],
         [
             'name' => 'Nettoyage linge délicat', 
@@ -50,7 +50,7 @@ class AppFixtures extends Fixture
             'name' => 'Nettoyage du cuire',
             'picture' => 'clean_leather.jpg',
             'section' => self::SECTION[0],
-            'icon' => 'leather.svg'
+            'icon' => 'clean_leather.svg'
         ],
         [
             'name' => 'Réparation de vêtement',
@@ -88,7 +88,7 @@ class AppFixtures extends Fixture
             'name' => 'Soin du cuire',
             'picture' => 'care_leather.jpg',
             'section' => self::SECTION[1],
-            'icon' => 'leather.svg'
+            'icon' => 'care_leather.svg'
 
         ],
     ];

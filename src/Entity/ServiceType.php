@@ -64,6 +64,7 @@ class ServiceType
     #[ORM\OneToMany(mappedBy: 'serviceType', targetEntity: Service::class)]
     private Collection $service;
 
+    #[Groups(['serviceType:read','section:read', 'serviceType:post', 'section:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $icon = null;
 
