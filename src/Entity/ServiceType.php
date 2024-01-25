@@ -44,7 +44,7 @@ class ServiceType
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['serviceType:read','section:read', 'articles:post', 'serviceType:post','section:patch','service:read'])]
+    #[Groups(['serviceType:read','section:read', 'articles:post','section:patch','service:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -56,7 +56,7 @@ class ServiceType
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
-    #[Groups(['serviceType:post', 'serviceType:read'])]
+    #[Groups(['serviceType:post', 'serviceType:read', 'service:read'])]
     #[ORM\ManyToOne(inversedBy: 'serviceTypes')]
     private ?Section $section = null;
 

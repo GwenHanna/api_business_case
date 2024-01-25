@@ -30,6 +30,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
             output: PricingDto::class,
             provider: PricingProvider::class,
         ),
+        new Get(
+            normalizationContext:['groups' => ['service:read']],
+            uriTemplate: '/services/{id}',
+        ),
         new Patch(
             normalizationContext:['groups' => ['service:patch:read']],
             denormalizationContext: ['groups' => ['service:patch']]
@@ -40,7 +44,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             denormalizationContext: ['groups' => ['service:post']],
         ),
         new Post(
-            normalizationContext:['groups' => ['service:read']],
+
             denormalizationContext: ['groups' => ['service:post']],
         ),
 
@@ -163,15 +167,5 @@ class Service
         $this->serviceType = $serviceType;
 
         return $this;
-    }
-    #[Groups('service:read')]
-    public function getServiceTypeName(): ?string
-    {
-        return $this->serviceType ? $this->serviceType->getName() : null;
-    }
-    #[Groups('service:read')]
-    public function getServiceTypeId(): ?string
-    {
-        return $this->serviceType ? $this->serviceType->getId() : null;
     }
 }

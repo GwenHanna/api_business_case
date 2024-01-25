@@ -45,7 +45,7 @@ class Section
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['section:read','section:patch','section:post', 'serviceType:read', 'section:post'])]
+    #[Groups(['section:read','section:patch','section:post', 'serviceType:read', 'section:post', 'service:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
