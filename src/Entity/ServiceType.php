@@ -2,14 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use App\Repository\ServiceTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,17 +17,26 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     operations: [
+        // GET operation configuration
         new Get(
                 normalizationContext: ['groups' => ['serviceType:read']],
-
         ),
-        new Patch(),
+        // PATCH operation configuration
+        new Patch(
+            normalizationContext:['groups' => ['serviceType:read']],
+            denormalizationContext:['groups' => ['serviceType:read']]
+        ),
+        // DELETE operation configuration
         new Delete(),
+        // GET operation configuration
         new GetCollection(
                 normalizationContext: ['groups' => ['serviceType:read']],
-
+            denormalizationContext:['groups' => ['serviceType:read']]
         ),
+        // POST operation configuration
         new Post(
+            normalizationContext:['groups' => ['serviceType:read']],
+            denormalizationContext:['groups' => ['serviceType:read']]
         ),
 
     ]
@@ -38,33 +45,39 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: ServiceTypeRepository::class)]
 class ServiceType
 {
+    // Identifiant unique du type service .
     #[Groups(['serviceType:read', 'section:read', 'serviceType:post', 'service:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['serviceType:read','section:read', 'articles:post','section:patch','service:read'])]
+    // Nom du type service .
+    #[Groups(['serviceType:read','section:read', 'articles:post','section:patch','service:read', 'serviceType:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['serviceType:read','section:read', 'serviceType:post', 'section:patch'])]
+    // Description du type service 
+    #[Groups(['serviceType:read','section:read', 'serviceType:post', 'section:patch', 'serviceType:patch'])]
     #[ORM\Column(length: 600)]
     private ?string $description = null;
 
-    #[Groups(['serviceType:read','section:read', 'serviceType:post', 'section:patch'])]
+    // URL de l'image représentant le type service 
+    #[Groups(['serviceType:read','section:read', 'serviceType:post', 'section:patch', 'serviceType:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
-    #[Groups(['serviceType:post', 'serviceType:read', 'service:read'])]
+    // Section à laquelle appartient le type service 
+    #[Groups(['serviceType:post', 'serviceType:read', 'service:read', 'serviceType:patch'])]
     #[ORM\ManyToOne(inversedBy: 'serviceTypes')]
     private ?Section $section = null;
 
+    //  Liste des services associés à ce type service 
     #[Groups(['serviceType:read', 'serviceType:post', 'service:read'])]
     #[ORM\OneToMany(mappedBy: 'serviceType', targetEntity: Service::class)]
     private Collection $service;
 
-    #[Groups(['serviceType:read','section:read', 'serviceType:post', 'section:patch'])]
+    #[Groups(['serviceType:read','section:read', 'serviceType:post', 'section:patch','serviceType:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $icon = null;
 
@@ -72,6 +85,8 @@ class ServiceType
     {
         $this->service = new ArrayCollection();
     }
+
+    // Les Getter et les Setter 
 
     public function getId(): ?int
     {

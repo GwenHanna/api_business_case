@@ -35,7 +35,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/services/{id}',
         ),
         new Patch(
-            normalizationContext:['groups' => ['service:patch:read']],
+            normalizationContext:['groups' => ['service:patch']],
             denormalizationContext: ['groups' => ['service:patch']]
         ),
         new Delete(),
@@ -61,15 +61,15 @@ class Service
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['service:read','serviceType:read','service:post'])]
+    #[Groups(['service:read','serviceType:read','service:post', 'service:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['service:read','service:post'])]
+    #[Groups(['service:read','service:post', 'service:patch'])]
     #[ORM\Column]
     private ?float $price = null;
 
-    #[Groups(['service:read', 'service:post'])]
+    #[Groups(['service:read', 'service:post', 'service:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
@@ -77,7 +77,7 @@ class Service
     private Collection $selections;
 
 
-    #[Groups(['service:read','service:post'])]
+    #[Groups(['service:read','service:post','service:patch'])]
     #[ORM\ManyToOne(inversedBy: 'service')]
     private ?ServiceType $serviceType = null;
 

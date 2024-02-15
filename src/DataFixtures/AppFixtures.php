@@ -2,13 +2,9 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Basket;
-use App\Entity\Category;
+
 use App\Entity\Comment;
-use App\Entity\Order;
-use App\Entity\Prestation;
 use App\Entity\Section;
-use App\Entity\Selection;
 use App\Entity\Service;
 use App\Entity\ServiceType;
 use App\Entity\User;
@@ -97,7 +93,7 @@ class AppFixtures extends Fixture
     [
         'Jeans','Pantalon en Lin','Pantalon Acrylique','Robe Acrylique', 'Robe en Soie','Chemise', 'Tee-shirt', 'Veste','Robe de marier','Costume','Couette', 'Drap','Ceinture', 'Sac','Tapis'
     ];
-// Nettoyage à sec Nettoyage linge délicat Réparation de vêtement Repassage
+    // Nettoyage à sec Nettoyage linge délicat Réparation de vêtement Repassage
     private const SERVICES =
     [
         [
@@ -481,22 +477,28 @@ class AppFixtures extends Fixture
         }
     
         $serviceTypes = [];
+        // Parcours des données de types de service définies dans la constante SERVICES_TYPE
         foreach (self::SERVICES_TYPE as $serviceTypeData) {
+             // Création d'une nouvelle instance de la classe ServiceType
             $serviceType = new ServiceType();
+            // Configuration des propriétés du ServiceType
             $serviceType
                 ->setName($serviceTypeData['name'])
                 ->setDescription($faker->realText())
                 ->setPicture($serviceTypeData['picture'])
                 ->setIcon($serviceTypeData['icon']);
     
+            // Recherche de la Section associée dans la liste des Sections
             foreach ($sections as $section) {
                 if ($section->getName() === $serviceTypeData['section']) {
+                    // Attribution de la Section trouvée au ServiceType
                     $serviceType->setSection($section);
                     break;
                 }
             }
-    
+            // Ajout du ServiceType à la liste
             $serviceTypes[] = $serviceType;
+            // Persistance du ServiceType avec Doctrine
             $manager->persist($serviceType);
         }
     
@@ -522,6 +524,7 @@ class AppFixtures extends Fixture
    
 
         // Création Users
+         $users = [];
         for($i=0; $i < self::NB_USER; $i++) { 
             $user = new User();
 
@@ -538,7 +541,7 @@ class AppFixtures extends Fixture
                 ->setStreet($faker->streetAddress())
                 ->setRoles(["ROLE_USER"])
                 ->setZipcode($faker->postcode());
-            
+            $users[] = $user;
             $manager->persist($user);
         }
 
@@ -582,6 +585,27 @@ class AppFixtures extends Fixture
             
             $manager->persist($admin);
 
+            for($i=0; $i < self::NB_COMMENT; $i++) { 
+                $comment = new Comment();
+    
+                $comment
+                    ->setContent($faker->realText())
+                    ->setAuthor($faker->randomElement($users))
+                    ->setDateCreated($faker->dateTime())
+                    ->setScore($faker->numberBetween(1,5));
+            
+                
+                $manager->persist($comment);
+            }
+
+
         $manager->flush();
+
+
+
+
     }
+
+
+  
 }

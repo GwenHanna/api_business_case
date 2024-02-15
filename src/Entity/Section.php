@@ -31,6 +31,7 @@ use ApiPlatform\Metadata\Put;
             denormalizationContext: ['groups' => ['section:post']] 
         ),
         new Post(
+            normalizationContext: ['groups' => ['section:read']],
             denormalizationContext: ['groups' => ['section:post']] 
         )
     ]
