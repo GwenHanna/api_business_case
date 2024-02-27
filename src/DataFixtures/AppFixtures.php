@@ -2,12 +2,13 @@
 
 namespace App\DataFixtures;
 
-
+use App\Entity\Article;
 use App\Entity\Comment;
 use App\Entity\Section;
 use App\Entity\Service;
 use App\Entity\ServiceType;
 use App\Entity\User;
+use App\Entity\Order;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -24,11 +25,11 @@ class AppFixtures extends Fixture
     private const NB_COMMENT = 10;
     private const NB_ORDERS = 5;
     private const NB_BASKET = 5;
-    private const SECTION = 
+    private const SECTION =
     [
         'nettoyage', 'soins', 'autre'
     ];
-    private const SERVICES_TYPE = 
+    private const SERVICES_TYPE =
     [
         [
             'name' => 'Nettoyage à sec',
@@ -37,7 +38,7 @@ class AppFixtures extends Fixture
             'icon' => 'clean_delicate.svg'
         ],
         [
-            'name' => 'Nettoyage linge délicat', 
+            'name' => 'Nettoyage linge délicat',
             'picture' => 'Card_clean_delicate.jpg',
             'section' => self::SECTION[0],
             'icon' => 'dry_cleaning.svg'
@@ -89,9 +90,9 @@ class AppFixtures extends Fixture
         ],
     ];
 
-    private const GARMENT = 
+    private const GARMENT =
     [
-        'Jeans','Pantalon en Lin','Pantalon Acrylique','Robe Acrylique', 'Robe en Soie','Chemise', 'Tee-shirt', 'Veste','Robe de marier','Costume','Couette', 'Drap','Ceinture', 'Sac','Tapis'
+        'Jeans', 'Pantalon en Lin', 'Pantalon Acrylique', 'Robe Acrylique', 'Robe en Soie', 'Chemise', 'Tee-shirt', 'Veste', 'Robe de marier', 'Costume', 'Couette', 'Drap', 'Ceinture', 'Sac', 'Tapis'
     ];
     // Nettoyage à sec Nettoyage linge délicat Réparation de vêtement Repassage
     private const SERVICES =
@@ -317,7 +318,7 @@ class AppFixtures extends Fixture
             'picture'   => 'jacket.jpg',
             'section' => 'autre'
         ],
-       
+
         [
             'name'  => 'Robe de marier',
             'service' => 'Nettoyage à sec',
@@ -458,14 +459,14 @@ class AppFixtures extends Fixture
             'picture'   =>  'Card_care_shut_up.jpg',
             'section' => 'nettoyage'
         ],
-        
-      
+
+
     ];
 
 
     public function load(ObjectManager $manager): void
     {
-       
+
 
         $faker = Factory::create('fr_FR');
         $sections = [];
@@ -475,11 +476,11 @@ class AppFixtures extends Fixture
             $sections[] = $section;
             $manager->persist($section);
         }
-    
+
         $serviceTypes = [];
         // Parcours des données de types de service définies dans la constante SERVICES_TYPE
         foreach (self::SERVICES_TYPE as $serviceTypeData) {
-             // Création d'une nouvelle instance de la classe ServiceType
+            // Création d'une nouvelle instance de la classe ServiceType
             $serviceType = new ServiceType();
             // Configuration des propriétés du ServiceType
             $serviceType
@@ -487,7 +488,7 @@ class AppFixtures extends Fixture
                 ->setDescription($faker->realText())
                 ->setPicture($serviceTypeData['picture'])
                 ->setIcon($serviceTypeData['icon']);
-    
+
             // Recherche de la Section associée dans la liste des Sections
             foreach ($sections as $section) {
                 if ($section->getName() === $serviceTypeData['section']) {
@@ -501,7 +502,7 @@ class AppFixtures extends Fixture
             // Persistance du ServiceType avec Doctrine
             $manager->persist($serviceType);
         }
-    
+
         $services = [];
         foreach (self::SERVICES as $serviceData) {
             $service = new Service();
@@ -509,23 +510,23 @@ class AppFixtures extends Fixture
                 ->setName($serviceData['name'])
                 ->setPicture($serviceData['picture'])
                 ->setPrice($serviceData['price']);
-    
+
             foreach ($serviceTypes as $serviceType) {
                 if ($serviceType->getName() === $serviceData['service']) {
                     $service->setServiceType($serviceType);
                     break;
                 }
             }
-    
+
             $services[] = $service;
             $manager->persist($service);
         }
 
-   
+
 
         // Création Users
-         $users = [];
-        for($i=0; $i < self::NB_USER; $i++) { 
+        $users = [];
+        for ($i = 0; $i < self::NB_USER; $i++) {
             $user = new User();
 
             $user
@@ -545,67 +546,86 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
 
-     // Création Custom User
+        // Création Custom User
 
-     $employee = new User();
+        $employee = new User();
 
-     $employee
-         ->setFirstname($faker->firstName())
-         ->setLastname($faker->lastName())
-         ->setBirthdate($faker->dateTime())
-         ->setCity($faker->city())
-         ->setDateCreated($faker->dateTime())
-         ->setEmail('user@employee.com')
-         ->setGender($faker->title())
-         ->setPassword($this->hasher->hashPassword($employee, 'employee123'))
-         ->setStreet($faker->postcode())
-         ->setStreet($faker->streetAddress())
-         ->setRoles(["ROLE_ADMIN", "ROLE_EMPLOYEE"])
-         ->setZipcode($faker->postcode());
-     
-     $manager->persist($employee);
+        $employee
+            ->setFirstname($faker->firstName())
+            ->setLastname($faker->lastName())
+            ->setBirthdate($faker->dateTime())
+            ->setCity($faker->city())
+            ->setDateCreated($faker->dateTime())
+            ->setEmail('user@employee.com')
+            ->setGender($faker->title())
+            ->setPassword($this->hasher->hashPassword($employee, 'employee123'))
+            ->setStreet($faker->postcode())
+            ->setStreet($faker->streetAddress())
+            ->setRoles(["ROLE_EMPLOYEE"])
+            ->setZipcode($faker->postcode());
+
+        $manager->persist($employee);
 
         // Création Admin
 
         $admin = new User();
 
-            $admin
-                ->setFirstname('Gwen')
-                ->setLastname($faker->lastName())
-                ->setBirthdate($faker->dateTime())
-                ->setCity($faker->city())
+        $admin
+            ->setFirstname('Gwen')
+            ->setLastname($faker->lastName())
+            ->setBirthdate($faker->dateTime())
+            ->setCity($faker->city())
+            ->setDateCreated($faker->dateTime())
+            ->setEmail('admin@admin.com')
+            ->setGender($faker->title())
+            ->setPassword($this->hasher->hashPassword($admin, 'admin123'))
+            ->setStreet($faker->postcode())
+            ->setStreet($faker->streetAddress())
+            ->setRoles(["ROLE_ADMIN"])
+            ->setZipcode($faker->postcode());
+
+        $manager->persist($admin);
+
+        for ($i = 0; $i < self::NB_COMMENT; $i++) {
+            $comment = new Comment();
+
+            $comment
+                ->setContent($faker->realText())
+                ->setAuthor($faker->randomElement($users))
                 ->setDateCreated($faker->dateTime())
-                ->setEmail('admin@admin.com')
-                ->setGender($faker->title())
-                ->setPassword($this->hasher->hashPassword($admin, 'admin123'))
-                ->setStreet($faker->postcode())
-                ->setStreet($faker->streetAddress())
-                ->setRoles(["ROLE_ADMIN"])
-                ->setZipcode($faker->postcode());
-            
-            $manager->persist($admin);
+                ->setScore($faker->numberBetween(1, 5));
 
-            for($i=0; $i < self::NB_COMMENT; $i++) { 
-                $comment = new Comment();
-    
-                $comment
-                    ->setContent($faker->realText())
-                    ->setAuthor($faker->randomElement($users))
-                    ->setDateCreated($faker->dateTime())
-                    ->setScore($faker->numberBetween(1,5));
-            
-                
-                $manager->persist($comment);
-            }
 
+            $manager->persist($comment);
+        }
+
+        $articles = [];
+
+
+
+        // Création des articles
+        for ($i = 0; $i < self::NB_ORDERS; $i++) {
+            $article = new Article();
+
+            // Assurez-vous que votre propriété setOrderId attend une instance d'Order
+            $article->setService($faker->randomElement($services));
+            $articles[] = $article;
+            $manager->persist($article);
+        }
+
+        for ($i = 0; $i < self::NB_ORDERS; $i++) {
+            $order = new Order();
+            $order
+                ->setUser($faker->randomElement($users))
+                ->setStatus('')
+                ->setPayementDate($faker->dateTime('now'))
+                ->setDepotDate($faker->dateTime('now'))
+                ->setStatus('En attente')
+                ->setArticle($faker->randomElement($articles));
+
+            $manager->persist($order);
+        }
 
         $manager->flush();
-
-
-
-
     }
-
-
-  
 }

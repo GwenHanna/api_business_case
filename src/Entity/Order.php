@@ -20,16 +20,16 @@ use ApiPlatform\Metadata\Post;
         new Get(
             normalizationContext: ['groups' => ['order:read']]
         ),
-        new Patch(),
+        new Patch(
+            denormalizationContext: ['groups' => ['order:patch', 'order:read']]
+        ),
         new Delete(),
-        new GetCollection( 
-            normalizationContext: ['groups' => ['order:read']]    
+        new GetCollection(
+            normalizationContext: ['groups' => ['order:read']]
         ),
-        new Post(
-            
-        ),
+        new Post(),
     ]
-    
+
 )]
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
@@ -38,7 +38,7 @@ class Order
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('order:read')]
+    #[Groups(['order:read', 'order:patch'])]
     private ?int $id = null;
 
     #[Groups('order:read')]
@@ -53,28 +53,21 @@ class Order
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $depotDate = null;
 
-    #[Groups('order:read')]
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $pickUpDate = null;
 
-    #[Groups('order:read')]
+    #[Groups(['order:read', 'order:patch'])]
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?User $user = null;
 
-    #[Groups('order:read')]
+    #[Groups(['order:read', 'order:patch'])]
     #[ORM\ManyToOne(inversedBy: 'ordersAssign')]
     private ?User $employee = null;
 
-    #[ORM\OneToMany(mappedBy: 'orderId', targetEntity: Selection::class)]
-    private Collection $selections;
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    private ?Article $article = null;
 
-    #[ORM\OneToMany(mappedBy: 'orderId', targetEntity: Article::class)]
-    private Collection $articles;
 
     public function __construct()
     {
-        $this->selections = new ArrayCollection();
-        $this->articles = new ArrayCollection();
     }
 
 
@@ -119,17 +112,6 @@ class Order
         return $this;
     }
 
-    public function getPickUpDate(): ?\DateTimeInterface
-    {
-        return $this->pickUpDate;
-    }
-
-    public function setPickUpDate(\DateTimeInterface $pickUpDate): static
-    {
-        $this->pickUpDate = $pickUpDate;
-
-        return $this;
-    }
 
     public function getUser(): ?User
     {
@@ -155,64 +137,15 @@ class Order
         return $this;
     }
 
-    /**
-     * @return Collection<int, Selection>
-     */
-    public function getSelections(): Collection
+    public function getArticle(): ?Article
     {
-        return $this->selections;
+        return $this->article;
     }
 
-    public function addSelection(Selection $selection): static
+    public function setArticle(?Article $article): static
     {
-        if (!$this->selections->contains($selection)) {
-            $this->selections->add($selection);
-            $selection->setOrderId($this);
-        }
+        $this->article = $article;
 
         return $this;
     }
-
-    public function removeSelection(Selection $selection): static
-    {
-        if ($this->selections->removeElement($selection)) {
-            // set the owning side to null (unless already changed)
-            if ($selection->getOrderId() === $this) {
-                $selection->setOrderId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Article>
-     */
-    public function getArticles(): Collection
-    {
-        return $this->articles;
-    }
-
-    public function addArticle(Article $article): static
-    {
-        if (!$this->articles->contains($article)) {
-            $this->articles->add($article);
-            $article->setOrderId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeArticle(Article $article): static
-    {
-        if ($this->articles->removeElement($article)) {
-            // set the owning side to null (unless already changed)
-            if ($article->getOrderId() === $this) {
-                $article->setOrderId(null);
-            }
-        }
-
-        return $this;
-    }
-
 }

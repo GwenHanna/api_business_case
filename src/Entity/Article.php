@@ -23,38 +23,33 @@ use Symfony\Component\Serializer\Attribute\Groups;
             denormalizationContext: ['groups' => ['article:patch']]
         ),
         new Delete(),
-        new GetCollection( 
-            normalizationContext: ['groups' => ['article:read']]  
+        new GetCollection(
+            normalizationContext: ['groups' => ['article:read']]
         ),
         new Post(
-            denormalizationContext: ['groups' => ['article:post']] 
+            denormalizationContext: ['groups' => ['article:post']]
         )
     ]
 )]
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
 {
+    #[Groups('article:read')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['article:read', 'article:post'])]
-    #[ORM\Column(length: 255)]
-    private ?string $state = null;
-
-    #[ORM\OneToMany(mappedBy: 'article', targetEntity: Selection::class, fetch:'EAGER')]
-    private Collection $selections;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
-    private ?Order $orderId = null;
+    private ?Service $service = null;
 
-    #[ORM\Column(length: 600, nullable: true)]
-    private ?string $note = null;
+    #[ORM\OneToMany(mappedBy: 'article', targetEntity: Order::class)]
+    private Collection $orders;
 
     public function __construct()
     {
-        $this->selections = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -62,68 +57,45 @@ class Article
         return $this->id;
     }
 
-    public function getState(): ?string
+
+    public function getService(): ?Service
     {
-        return $this->state;
+        return $this->service;
     }
 
-    public function setState(string $state): static
+    public function setService(?Service $service): static
     {
-        $this->state = $state;
+        $this->service = $service;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Selection>
+     * @return Collection<int, Order>
      */
-    public function getSelections(): Collection
+    public function getOrders(): Collection
     {
-        return $this->selections;
+        return $this->orders;
     }
 
-    public function addSelection(Selection $selection): static
+    public function addOrder(Order $order): static
     {
-        if (!$this->selections->contains($selection)) {
-            $this->selections->add($selection);
-            $selection->setArticle($this);
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setArticle($this);
         }
 
         return $this;
     }
 
-    public function removeSelection(Selection $selection): static
+    public function removeOrder(Order $order): static
     {
-        if ($this->selections->removeElement($selection)) {
+        if ($this->orders->removeElement($order)) {
             // set the owning side to null (unless already changed)
-            if ($selection->getArticle() === $this) {
-                $selection->setArticle(null);
+            if ($order->getArticle() === $this) {
+                $order->setArticle(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getOrderId(): ?Order
-    {
-        return $this->orderId;
-    }
-
-    public function setOrderId(?Order $orderId): static
-    {
-        $this->orderId = $orderId;
-
-        return $this;
-    }
-
-    public function getNote(): ?string
-    {
-        return $this->note;
-    }
-
-    public function setNote(?string $note): static
-    {
-        $this->note = $note;
 
         return $this;
     }

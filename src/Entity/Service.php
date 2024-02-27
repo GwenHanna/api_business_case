@@ -19,28 +19,28 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
-    paginationEnabled:false,
-    
+    paginationEnabled: false,
+
     operations: [
 
-        
+
         new Get(
-            normalizationContext:['groups' => ['service:read']],
+            normalizationContext: ['groups' => ['service:read']],
             uriTemplate: '/services/{id}/pricing',
             output: PricingDto::class,
             provider: PricingProvider::class,
         ),
         new Get(
-            normalizationContext:['groups' => ['service:read']],
+            normalizationContext: ['groups' => ['service:read']],
             uriTemplate: '/services/{id}',
         ),
         new Patch(
-            normalizationContext:['groups' => ['service:patch']],
+            normalizationContext: ['groups' => ['service:patch']],
             denormalizationContext: ['groups' => ['service:patch']]
         ),
         new Delete(),
-        new GetCollection( 
-            normalizationContext:['groups' => ['service:read']],
+        new GetCollection(
+            normalizationContext: ['groups' => ['service:read']],
             denormalizationContext: ['groups' => ['service:post']],
         ),
         new Post(
@@ -61,11 +61,11 @@ class Service
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['service:read','serviceType:read','service:post', 'service:patch'])]
+    #[Groups(['service:read', 'serviceType:read', 'service:post', 'service:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['service:read','service:post', 'service:patch'])]
+    #[Groups(['service:read', 'service:post', 'service:patch'])]
     #[ORM\Column]
     private ?float $price = null;
 
@@ -73,17 +73,18 @@ class Service
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
-    #[ORM\OneToMany(mappedBy: 'article', targetEntity: Selection::class)]
-    private Collection $selections;
 
 
-    #[Groups(['service:read','service:post','service:patch'])]
+    #[Groups(['service:read', 'service:post', 'service:patch'])]
     #[ORM\ManyToOne(inversedBy: 'service')]
     private ?ServiceType $serviceType = null;
 
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Article::class)]
+    private Collection $articles;
+
     public function __construct()
     {
-        $this->selections = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -127,36 +128,6 @@ class Service
         return $this;
     }
 
-    /**
-     * @return Collection<int, Selection>
-     */
-    public function getSelections(): Collection
-    {
-        return $this->selections;
-    }
-
-    public function addSelection(Selection $selection): static
-    {
-        if (!$this->selections->contains($selection)) {
-            $this->selections->add($selection);
-            $selection->setService($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSelection(Selection $selection): static
-    {
-        if ($this->selections->removeElement($selection)) {
-            // set the owning side to null (unless already changed)
-            if ($selection->getService() === $this) {
-                $selection->setService(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getServiceType(): ?ServiceType
     {
         return $this->serviceType;
@@ -165,6 +136,36 @@ class Service
     public function setServiceType(?ServiceType $serviceType): static
     {
         $this->serviceType = $serviceType;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): static
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles->add($article);
+            $article->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): static
+    {
+        if ($this->articles->removeElement($article)) {
+            // set the owning side to null (unless already changed)
+            if ($article->getService() === $this) {
+                $article->setService(null);
+            }
+        }
 
         return $this;
     }
