@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         // GET operation configuration
         new Get(
-                normalizationContext: ['groups' => ['serviceType:read']],
+            normalizationContext: ['groups' => ['serviceType:read']],
         ),
         // PATCH operation configuration
         new Patch(
@@ -30,7 +30,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Delete(),
         // GET operation configuration
         new GetCollection(
-                normalizationContext: ['groups' => ['serviceType:read']],
+            normalizationContext: ['groups' => ['serviceType:read']],
             denormalizationContext:['groups' => ['serviceType:read']]
         ),
         // POST operation configuration
