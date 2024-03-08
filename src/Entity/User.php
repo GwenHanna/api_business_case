@@ -52,7 +52,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy:"AUTO")]
     #[ORM\Column]
     #[Groups(['order:patch', 'user:delete', 'user:read', 'order:read'])]
     private ?int $id = null;
@@ -122,16 +122,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateCreated = null;
 
-    #[Groups(['user:delete', 'user:read', 'order:patch'])]
-    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Order::class, cascade: ["remove", "persist"])]
-    private Collection $ordersAssign;
-
 
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->ordersAssign = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -370,33 +365,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Order>
-     */
-    public function getOrdersAssign(): Collection
-    {
-        return $this->ordersAssign;
-    }
-
-    public function addOrdersAssign(Order $ordersAssign): static
-    {
-        if (!$this->ordersAssign->contains($ordersAssign)) {
-            $this->ordersAssign->add($ordersAssign);
-            $ordersAssign->setEmployee($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrdersAssign(Order $ordersAssign): static
-    {
-        if ($this->ordersAssign->removeElement($ordersAssign)) {
-            // set the owning side to null (unless already changed)
-            if ($ordersAssign->getEmployee() === $this) {
-                $ordersAssign->setEmployee(null);
-            }
-        }
-
-        return $this;
-    }
 }

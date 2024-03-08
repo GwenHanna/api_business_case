@@ -4,8 +4,6 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\OrderRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -21,7 +19,8 @@ use ApiPlatform\Metadata\Post;
             normalizationContext: ['groups' => ['order:read']]
         ),
         new Patch(
-            denormalizationContext: ['groups' => ['order:patch', 'order:read']]
+            normalizationContext: ['groups' => ['order:patch']],
+            denormalizationContext: ['groups' => ['order:patch']],
         ),
         new Delete(),
         new GetCollection(
@@ -38,10 +37,10 @@ class Order
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['order:read', 'order:patch'])]
+    #[Groups(['order:read'])]
     private ?int $id = null;
 
-    #[Groups('order:read')]
+    #[Groups(['order:read', 'order:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
@@ -54,22 +53,16 @@ class Order
     private ?\DateTimeInterface $depotDate = null;
 
 
-    #[Groups(['order:read', 'order:patch'])]
+    #[Groups(['order:read'])]
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?User $user = null;
-
-    #[Groups(['order:read', 'order:patch'])]
-    #[ORM\ManyToOne(inversedBy: 'ordersAssign')]
-    private ?User $employee = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?Article $article = null;
 
-
-    public function __construct()
-    {
-    }
-
+    #[Groups(['order:read', 'order:patch'])]
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $employee_id = null;
 
     public function getId(): ?int
     {
@@ -125,18 +118,6 @@ class Order
         return $this;
     }
 
-    public function getEmployee(): ?User
-    {
-        return $this->employee;
-    }
-
-    public function setEmployee(?User $employee): static
-    {
-        $this->employee = $employee;
-
-        return $this;
-    }
-
     public function getArticle(): ?Article
     {
         return $this->article;
@@ -145,6 +126,18 @@ class Order
     public function setArticle(?Article $article): static
     {
         $this->article = $article;
+
+        return $this;
+    }
+
+    public function getEmployeeId(): ?string
+    {
+        return $this->employee_id;
+    }
+
+    public function setEmployeeId(?string $employee_id): static
+    {
+        $this->employee_id = $employee_id;
 
         return $this;
     }
