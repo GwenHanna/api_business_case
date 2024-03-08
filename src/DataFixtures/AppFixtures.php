@@ -24,7 +24,6 @@ class AppFixtures extends Fixture
     private const NB_USER = 10;
     private const NB_COMMENT = 10;
     private const NB_ORDERS = 5;
-    private const NB_BASKET = 5;
     private const SECTION =
     [
         'nettoyage', 'soins', 'autre'
@@ -463,7 +462,7 @@ class AppFixtures extends Fixture
 
     ];
 
-
+    // Méthode utilisée pour charger des données dans la base de données
     public function load(ObjectManager $manager): void
     {
 
@@ -480,8 +479,10 @@ class AppFixtures extends Fixture
         $serviceTypes = [];
         // Parcours des données de types de service définies dans la constante SERVICES_TYPE
         foreach (self::SERVICES_TYPE as $serviceTypeData) {
+
             // Création d'une nouvelle instance de la classe ServiceType
             $serviceType = new ServiceType();
+
             // Configuration des propriétés du ServiceType
             $serviceType
                 ->setName($serviceTypeData['name'])
@@ -626,6 +627,7 @@ class AppFixtures extends Fixture
             $manager->persist($order);
         }
 
+        // Exécution des opérations d'écriture dans la base de données
         $manager->flush();
     }
 }
