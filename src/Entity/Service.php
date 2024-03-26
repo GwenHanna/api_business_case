@@ -79,13 +79,6 @@ class Service
     #[ORM\ManyToOne(inversedBy: 'service')]
     private ?ServiceType $serviceType = null;
 
-    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Article::class)]
-    private Collection $articles;
-
-    public function __construct()
-    {
-        $this->articles = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -136,36 +129,6 @@ class Service
     public function setServiceType(?ServiceType $serviceType): static
     {
         $this->serviceType = $serviceType;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Article>
-     */
-    public function getArticles(): Collection
-    {
-        return $this->articles;
-    }
-
-    public function addArticle(Article $article): static
-    {
-        if (!$this->articles->contains($article)) {
-            $this->articles->add($article);
-            $article->setService($this);
-        }
-
-        return $this;
-    }
-
-    public function removeArticle(Article $article): static
-    {
-        if ($this->articles->removeElement($article)) {
-            // set the owning side to null (unless already changed)
-            if ($article->getService() === $this) {
-                $article->setService(null);
-            }
-        }
 
         return $this;
     }
