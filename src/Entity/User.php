@@ -48,17 +48,17 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ApiFilter(SearchFilter::class, properties: ['roles'])]
 #[ApiFilter(SearchFilter::class, properties: ['email'])]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity("email", message: "This email is already in use.")]
+#[UniqueEntity("email", message: "Cet email éexiste déjà.")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy:"AUTO")]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
     #[ORM\Column]
     #[Groups(['order:patch', 'user:delete', 'user:read', 'order:read'])]
     private ?int $id = null;
 
     #[Assert\Email(
-        message: 'The email is not a valid email.',
+        message: 'Votre email est invalid.',
     )]
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(['user:delete', 'user:read', 'user:post', 'user:patch', 'order:patch'])]
@@ -73,12 +73,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     #[Assert\Length(
-        min: 6,
+        min: 12,
         max: 5000
     )]
     #[Groups('user:delete')]
     private ?string $password = null;
 
+    #[Assert\Length(
+        min: 12,
+        max: 5000,
+        minMessage: 'Votre mot de passe doit avoir minimum {{ limit }} caractères',
+    )]
     #[Groups(['user:delete', 'user:post', 'user:patch'])]
     private ?string $plainPassword = null;
 
@@ -364,5 +369,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 }
