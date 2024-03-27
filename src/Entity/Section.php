@@ -26,13 +26,13 @@ use ApiPlatform\Metadata\Put;
             denormalizationContext: ['groups' => ['section:patch']]
         ),
         new Delete(),
-        new GetCollection( 
+        new GetCollection(
             normalizationContext: ['groups' => ['section:read']],
-            denormalizationContext: ['groups' => ['section:post']] 
+            denormalizationContext: ['groups' => ['section:post']]
         ),
         new Post(
             normalizationContext: ['groups' => ['section:read']],
-            denormalizationContext: ['groups' => ['section:post']] 
+            denormalizationContext: ['groups' => ['section:post']]
         )
     ]
 )]
@@ -46,7 +46,7 @@ class Section
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['section:read','section:patch','section:post', 'serviceType:read', 'section:post', 'service:read'])]
+    #[Groups(['section:read', 'section:patch', 'section:post', 'serviceType:read', 'section:post', 'article:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 

@@ -8,21 +8,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 final class PricingDto
 {
-    #[Groups(['service:read'])]
+    #[Groups(['article:read'])]
     public float $price;
 
-    #[Groups(['service:read'])]
+    #[Groups(['article:read'])]
     public float $priceTotal;
-    #[Groups(['service:read'])]
+    #[Groups(['article:read'])]
     public int $quantity;
-    #[Groups(['service:read'])]
+    #[Groups(['article:read'])]
     public int $serviceId;
 
     public function __construct(
-         float $price,
-         float $priceTotal,
-         int $quantity,
-         int $serviceId
+        float $price,
+        float $priceTotal,
+        int $quantity,
+        int $serviceId
     ) {
         $this->price = $price;
         $this->priceTotal = $priceTotal;

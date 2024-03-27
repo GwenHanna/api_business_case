@@ -19,12 +19,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Patch(),
         new Delete(),
-        new GetCollection( 
-            normalizationContext: ['groups' => ['selection:read']]  
+        new GetCollection(
+            normalizationContext: ['groups' => ['selection:read']]
         ),
         new Post(),
     ]
-    
+
 )]
 #[ORM\Entity(repositoryClass: SelectionRepository::class)]
 class Selection
@@ -34,11 +34,11 @@ class Selection
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups( 'selection:read')]
+    #[Groups('selection:read')]
     #[ORM\ManyToOne(inversedBy: 'selections')]
-    private ?Service $service = null;
+    private ?Article $service = null;
 
-    #[Groups( 'selection:read')]
+    #[Groups('selection:read')]
     #[ORM\ManyToOne(inversedBy: 'selections')]
     private ?Article $article = null;
 
@@ -53,12 +53,12 @@ class Selection
         return $this->id;
     }
 
-    public function getService(): ?Service
+    public function getService(): ?Article
     {
         return $this->service;
     }
 
-    public function setService(?Service $service): static
+    public function setService(?Article $service): static
     {
         $this->service = $service;
 

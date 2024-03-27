@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Service;
+use App\Entity\Article;
 use ContainerGtOxGLx\getUserRepositoryService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,16 +14,16 @@ class PricingController extends AbstractController
 {
 
     // #[Route('api/services/{id}/pricing', name: 'selection_pricing', methods: 'GET', stateless: false)]
-    // public function index(Service $service, SessionInterface $session): Response
+    // public function index(Article $service, SessionInterface $session): Response
     // {
     //     $user = $this->getUser();
 
- 
+
     //     // Calculer le prix total
     //     $price = $service->getPrice();
     //     $sum = $price * $quantity;
-      
-        
+
+
     //     return $this->json(['price' => $price, 'quantity' => $quantity ,'priceTotal' => $sum]);
     // }
 }

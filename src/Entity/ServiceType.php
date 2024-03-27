@@ -45,7 +45,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 class ServiceType
 {
     // Identifiant unique du type service .
-    #[Groups(['serviceType:read', 'section:read', 'serviceType:post', 'service:read'])]
+    #[Groups(['serviceType:read', 'section:read', 'serviceType:post', 'article:read'])]
     // Annotation pour indiquer qu'il s'agit de
     // la clé primaire dans la base de données
     #[ORM\Id]
@@ -58,7 +58,7 @@ class ServiceType
     private ?int $id = null;
 
     // Nom du type service .
-    #[Groups(['serviceType:read', 'section:read', 'articles:post', 'section:patch', 'service:read', 'serviceType:patch'])]
+    #[Groups(['serviceType:read', 'section:read', 'articles:post', 'section:patch', 'article:read', 'serviceType:patch'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -73,13 +73,13 @@ class ServiceType
     private ?string $picture = null;
 
     // Section à laquelle appartient le type service 
-    #[Groups(['serviceType:post', 'serviceType:read', 'serviceType:patch', 'service:read'])]
+    #[Groups(['serviceType:post', 'serviceType:read', 'serviceType:patch', 'article:read'])]
     #[ORM\ManyToOne(inversedBy: 'serviceTypes')]
     private ?Section $section = null;
 
     //  Liste des services associés à ce type service 
-    #[Groups(['serviceType:read', 'serviceType:post', 'service:read'])]
-    #[ORM\OneToMany(mappedBy: 'serviceType', targetEntity: Service::class)]
+    #[Groups(['serviceType:read', 'serviceType:post', 'article:read'])]
+    #[ORM\OneToMany(mappedBy: 'serviceType', targetEntity: Article::class)]
     private Collection $service;
 
     #[Groups(['serviceType:read', 'section:read', 'serviceType:post', 'section:patch', 'serviceType:patch'])]
@@ -152,14 +152,14 @@ class ServiceType
     }
 
     /**
-     * @return Collection<int, Service>
+     * @return Collection<int, Article>
      */
     public function getServices(): Collection
     {
         return $this->service;
     }
 
-    public function addService(Service $serviceType): static
+    public function addService(Article $serviceType): static
     {
         if (!$this->service->contains($serviceType)) {
             $this->service->add($serviceType);
@@ -169,7 +169,7 @@ class ServiceType
         return $this;
     }
 
-    public function removeService(Service $serviceType): static
+    public function removeService(Article $serviceType): static
     {
         if ($this->service->removeElement($serviceType)) {
             // set the owning side to null (unless already changed)

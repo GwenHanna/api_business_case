@@ -5,7 +5,6 @@ namespace App\DataFixtures;
 use App\Entity\Article;
 use App\Entity\Comment;
 use App\Entity\Section;
-use App\Entity\Service;
 use App\Entity\ServiceType;
 use App\Entity\User;
 use App\Entity\Order;
@@ -504,23 +503,23 @@ class AppFixtures extends Fixture
             $manager->persist($serviceType);
         }
 
-        $services = [];
+        $articles = [];
         foreach (self::SERVICES as $serviceData) {
-            $service = new Service();
-            $service
+            $article = new Article();
+            $article
                 ->setName($serviceData['name'])
                 ->setPicture($serviceData['picture'])
                 ->setPrice($serviceData['price']);
 
             foreach ($serviceTypes as $serviceType) {
                 if ($serviceType->getName() === $serviceData['service']) {
-                    $service->setServiceType($serviceType);
+                    $article->setServiceType($serviceType);
                     break;
                 }
             }
 
-            $services[] = $service;
-            $manager->persist($service);
+            $articles[] = $article;
+            $manager->persist($article);
         }
 
 
@@ -604,15 +603,15 @@ class AppFixtures extends Fixture
 
 
 
-        // Création des articles
-        for ($i = 0; $i < self::NB_ORDERS; $i++) {
-            $article = new Article();
+        // // Création des articles
+        // for ($i = 0; $i < self::NB_ORDERS; $i++) {
+        //     $article = new Article();
 
-            // Assurez-vous que votre propriété setOrderId attend une instance d'Order
-            $article->setService($faker->randomElement($services));
-            $articles[] = $article;
-            $manager->persist($article);
-        }
+        //     // Assurez-vous que votre propriété setOrderId attend une instance d'Order
+        //     $article->setService($faker->randomElement($services));
+        //     $articles[] = $article;
+        //     $manager->persist($article);
+        // }
 
         for ($i = 0; $i < self::NB_ORDERS; $i++) {
             $order = new Order();
