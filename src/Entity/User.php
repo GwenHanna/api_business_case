@@ -22,6 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Validator\password as Asserts;
 
 
 #[ApiResource(
@@ -79,11 +80,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups('user:delete')]
     private ?string $password = null;
 
-    #[Assert\Length(
-        min: 12,
-        max: 5000,
-        minMessage: 'Votre mot de passe doit avoir minimum {{ limit }} caractères',
-    )]
+    #[Asserts\MyPasswordRequirements]
     #[Groups(['user:delete', 'user:post', 'user:patch'])]
     private ?string $plainPassword = null;
 
