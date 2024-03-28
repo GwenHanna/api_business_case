@@ -80,7 +80,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups('user:delete')]
     private ?string $password = null;
 
-    #[Asserts\MyPasswordRequirements]
+    #[Asserts\MyPasswordRequirements()]
     #[Groups(['user:delete', 'user:post', 'user:patch'])]
     private ?string $plainPassword = null;
 

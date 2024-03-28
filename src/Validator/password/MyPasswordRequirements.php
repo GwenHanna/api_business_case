@@ -24,9 +24,9 @@ class MyPasswordRequirements extends Constraint
         $this->constraints = [
             new Assert\NotBlank(['message' => 'Ce champ ne peut pas être vide.']),
             new Assert\Length(['min' => 12, 'minMessage' => 'La longueur minimale du mot de passe est de {{ limit }} caractères.']),
-            new Assert\Regex(['pattern' => '[A-Z]', 'message' => 'Votre mot de passe doit avoir au une majuscule.']),
-            new Assert\Regex(['pattern' => '[1-9]', 'message' => 'Votre mot de passe doit avoir au moins un chiffre entre 1 et 9.']),
-            new Assert\Regex(['pattern' => '[!@#$%^&*(),.?":{}|<>]', 'message' => 'Votre mot de passe doit avoir un caractère spécial.']),
+            new Assert\Regex(['pattern' => '/[A-Z]/', 'message' => 'Votre mot de passe doit avoir au une majuscule.']),
+            new Assert\Regex(['pattern' => '/[0-9]/', 'message' => 'Votre mot de passe doit avoir au moins un chiffre entre 1 et 9.']),
+            new Assert\Regex(['pattern' => '/[!@#$%^&*(),.?":{}|<>]/', 'message' => 'Votre mot de passe doit avoir un caractère spécial.']),
         ];
     }
 }
